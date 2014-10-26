@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	Welcome - EventManager
+	<a href="./login.jsp">Connexion</a>
+	<br>
+	<a href="./creation.jsp">Creer un compte</a>
 </body>
 </html>
