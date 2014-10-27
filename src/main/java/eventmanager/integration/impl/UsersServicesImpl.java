@@ -7,7 +7,6 @@ import eventmanager.business.persistence.PersistenceConfig;
 import eventmanager.business.persistence.PersistenceServiceProvider;
 import eventmanager.business.persistence.services.UsersPersistence;
 import eventmanager.integration.UsersServices;
-import eventmanager.integration.bean.AbstractBean;
 import eventmanager.integration.bean.UserBean;
 import eventmanager.tools.BeanConverter;
 
@@ -22,14 +21,15 @@ public class UsersServicesImpl implements UsersServices {
 	public UsersServicesImpl() {
 		dao = PersistenceServiceProvider.getService(UsersPersistence.class, PersistenceConfig.JPA);
 		beanConverter = new ConvertUtilsBean();
-		beanConverter.register(new BeanConverter(), AbstractBean.class);
+		beanConverter.register(new BeanConverter(), UsersEntity.class);
 	}
 
 	@Override
 	public boolean createUser(UserBean user) {
 		if (dao.load(user.getEmail()) == null && user.getPwd() != null 
 				&& !"".equals(user.getPwd())) {
-			dao.insert((UsersEntity) beanConverter.convert(user, UsersEntity.class));
+			UsersEntity entity = (UsersEntity) beanConverter.convert(user, UsersEntity.class);
+			dao.insert(entity);
 			return true;
 		}
 		return false;
