@@ -5,10 +5,11 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
 			<!-- Database configuration -->
+			<!-- No database definition for database id 1 : Derby used as an example -->
 			<property name="hibernate.connection.driver_class"  value="org.apache.derby.jdbc.ClientDriver"/>
-			<property name="hibernate.connection.url"           value="jdbc:derby://localhost:1527/DataEventManager"/>
-			<property name="hibernate.connection.username"      value="app"/>
-			<property name="hibernate.connection.password"      value="app"/>
+			<property name="hibernate.connection.url"           value="jdbc:derby://localhost:1527/bookstore"/>
+			<property name="hibernate.connection.username"      value="root"/>
+			<property name="hibernate.connection.password"      value="admin"/>
 			<property name="hibernate.dialect"                  value="org.hibernate.dialect.DerbyDialect"/>
 			<!-- Hibernate configuration -->
 			<property name="hibernate.hbm2ddl.auto"       value="none"/>
