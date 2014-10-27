@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.junit.Before;
 import org.junit.Test;
 
 import eventmanager.business.bean.jpa.EventsEntity;
@@ -18,12 +19,18 @@ import eventmanager.integration.bean.UserBean;
 import eventmanager.tools.BeanConverter;
 
 public class ConvertBeanTest {
+	private ConvertUtilsBean converter;
+	
+	@Before
+	public void setUp() {
+		converter = new ConvertUtilsBean();
+		converter = new ConvertUtilsBean();
+		converter.register(new BeanConverter(), UsersEntity.class);
+		converter.register(new BeanConverter(), EventsEntity.class);
+	}
 	
 	@Test
 	public void testUserBean() {
-		ConvertUtilsBean converter = new ConvertUtilsBean();
-		converter = new ConvertUtilsBean();
-		converter.register(new BeanConverter(), UsersEntity.class);
 		UserBean bean = new UserBean("test@mail.com", "password");
 		UsersEntity convertedBean = (UsersEntity) converter.convert(bean, UsersEntity.class);
 		
@@ -34,8 +41,7 @@ public class ConvertBeanTest {
 	
 	@Test
 	public void testEventBean() {
-		ConvertUtilsBean converter = new ConvertUtilsBean();
-		converter.register(new BeanConverter(), EventsEntity.class);
+		
 		ParticipantBean p1 = new ParticipantBean();
 		p1.setNom("Fraisse");
 		p1.setPrenom("Adrian");
@@ -52,6 +58,10 @@ public class ConvertBeanTest {
 		listBeans.add(p1);
 		listBeans.add(p2);
 		
+		UserBean host = new UserBean();
+		host.setEmail("tata_yoyo@gmail.com");
+		host.setPwd("password");
+		
 		EventBean eventBean = new EventBean();
 		eventBean.setNom("Tests Unitaires");
 		eventBean.setAdresse("Eclipse");
@@ -60,11 +70,13 @@ public class ConvertBeanTest {
 		eventBean.setVisible(true);
 		eventBean.setDescription("Les tests unitaires c'est bon pour la santé");
 		eventBean.setListParticipants(listBeans);
+		eventBean.setHote(host);
 		
 		EventsEntity convertedBean = (EventsEntity) converter.convert(eventBean, EventsEntity.class);
 		assertNotNull(convertedBean);
 		assertEquals("Conversion attribut Visible d'EventsEntity en Short", 1, convertedBean.getVisible());
 		assertEquals("Attribut email de p1 copié", p1.getEmail(), convertedBean.getListOfParticipants().get(0).getEmail());
 		assertEquals("Attribut société de p2 copié", p2.getSociete(), convertedBean.getListOfParticipants().get(1).getSociete());
+		assertEquals("Attribut hote copié", host.getEmail(), convertedBean.getUsers().getEmail());
 	}
 }

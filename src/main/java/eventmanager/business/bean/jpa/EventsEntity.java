@@ -27,7 +27,8 @@ import javax.persistence.*;
 @Table(name="EVENTS", schema="APP" )
 // Define named queries here
 @NamedQueries ( {
-  @NamedQuery ( name="EventsEntity.countAll", query="SELECT COUNT(x) FROM EventsEntity x" )
+  @NamedQuery ( name="EventsEntity.countAll", query="SELECT COUNT(x) FROM EventsEntity x" ),
+  @NamedQuery ( name="EventsEntity.selectByUser", query="SELECT * FROM EventsEntity x WHERE x.users == :users")
 } )
 public class EventsEntity implements Serializable {
 
