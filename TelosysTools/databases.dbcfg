@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databases defaultId="0" maxId="4">
+<db dialect="org.hibernate.dialect.DerbyDialect" driver="org.apache.derby.jdbc.ClientDriver" id="1" isolationLevel="" name="DERBY" poolSize="1" typeName="DERBY" url="jdbc:derby://localhost:1527/DataEventManager">
+<property name="user" value="app"/>
+<property name="password" value="app"/>
+<metadata catalog="APP" schema="APP" table-name-pattern="%" table-types="TABLE"/>
+</db>
+</databases>
