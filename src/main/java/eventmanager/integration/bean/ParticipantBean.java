@@ -1,5 +1,7 @@
 package eventmanager.integration.bean;
 
+import java.util.List;
+
 public class ParticipantBean extends AbstractBean {
 
 	/**
@@ -7,10 +9,26 @@ public class ParticipantBean extends AbstractBean {
 	 */
 	private static final long serialVersionUID = -4872909996952632899L;
 
+	/**
+	 * 
+	 */
 	private String nom;
+	/**
+	 * 
+	 */
 	private String prenom;
+	/**
+	 * 
+	 */
 	private String email;
+	/**
+	 * 
+	 */
 	private String societe;
+	/**
+	 * La liste des évenements auquels la personne participe.
+	 */
+	private List<EventBean> listEvents;
 	
 	public String getNom() {
 		return nom;
@@ -38,6 +56,12 @@ public class ParticipantBean extends AbstractBean {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public List<EventBean> getListEvents() {
+		return listEvents;
+	}
+	public void setListEvents(List<EventBean> listEvents) {
+		this.listEvents = listEvents;
 	}
 
 }

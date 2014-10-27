@@ -30,7 +30,7 @@ public class ConvertBeanTest {
 		assertNotNull(convertedBean);
 		assertEquals("mail attribute copy OK", bean.getEmail(), convertedBean.getEmail());
 		assertEquals("pwd attribute copy OK", bean.getPwd(), convertedBean.getPwd());
-	}		ConvertUtilsBean converter = new ConvertUtilsBean();
+	}
 	
 	@Test
 	public void testEventBean() {
@@ -57,10 +57,14 @@ public class ConvertBeanTest {
 		eventBean.setAdresse("Eclipse");
 		eventBean.setDatedeb(new Date());
 		eventBean.setDatefin(new Date());
-		eventBean.setVisible(false);
+		eventBean.setVisible(true);
 		eventBean.setDescription("Les tests unitaires c'est bon pour la santé");
 		eventBean.setListParticipants(listBeans);
 		
-		assertNotNull(converter.convert(eventBean));
+		EventsEntity convertedBean = (EventsEntity) converter.convert(eventBean, EventsEntity.class);
+		assertNotNull(convertedBean);
+		assertEquals("Conversion attribut Visible d'EventsEntity en Short", 1, convertedBean.getVisible());
+		assertEquals("Attribut email de p1 copié", p1.getEmail(), convertedBean.getListOfParticipants().get(0).getEmail());
+		assertEquals("Attribut société de p2 copié", p2.getSociete(), convertedBean.getListOfParticipants().get(1).getSociete());
 	}
 }

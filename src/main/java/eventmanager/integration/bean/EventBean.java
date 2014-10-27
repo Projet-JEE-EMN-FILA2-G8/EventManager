@@ -18,6 +18,11 @@ public class EventBean extends AbstractBean {
 	 * L'id de l'event, utilisé dans l'URL
 	 */
 	private Integer id;
+	
+	/**
+	 * L'hôte de l'évenement
+	 */
+	private UserBean hote;
 	/**
 	 * Lieu de l'évenement
 	 */
@@ -94,6 +99,12 @@ public class EventBean extends AbstractBean {
 	}
 	public void setListParticipants(List<ParticipantBean> listParticipants) {
 		this.listParticipants = listParticipants;
+	}
+	public UserBean getHote() {
+		return hote;
+	}
+	public void setHote(UserBean hote) {
+		this.hote = hote;
 	}
 
 }
