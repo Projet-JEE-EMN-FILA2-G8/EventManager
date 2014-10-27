@@ -57,10 +57,4 @@ public class UserBean extends AbstractBean {
 		this.pwd = pwd;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

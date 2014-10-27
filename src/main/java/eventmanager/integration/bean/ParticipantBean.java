@@ -7,10 +7,37 @@ public class ParticipantBean extends AbstractBean {
 	 */
 	private static final long serialVersionUID = -4872909996952632899L;
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+	private String nom;
+	private String prenom;
+	private String email;
+	private String societe;
+	
+	public String getNom() {
+		return nom;
+	}
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+	public String getPrenom() {
+		return prenom;
+	}
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getSociete() {
+		return societe;
+	}
+	public void setSociete(String societe) {
+		this.societe = societe;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

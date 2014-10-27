@@ -9,5 +9,4 @@ public abstract class AbstractBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 7245525592854751926L;
 
-	public abstract String toString();
 }

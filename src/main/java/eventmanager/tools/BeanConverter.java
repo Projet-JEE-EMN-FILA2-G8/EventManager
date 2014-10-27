@@ -1,6 +1,8 @@
 package eventmanager.tools;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.Converter;
@@ -25,6 +27,12 @@ public class BeanConverter implements Converter {
 			valToReturn = new UsersEntity();
 		} else if (clazz == EventsEntity.class && value instanceof EventBean) {
 			valToReturn = new EventsEntity();
+			List<ParticipantBean> listToConvert = ((EventBean) value).getListParticipants();
+			List<ParticipantsEntity> convertedList = new ArrayList<ParticipantsEntity>();
+			for (ParticipantBean elem : listToConvert) {
+				convertedList.add((ParticipantsEntity) convert(ParticipantsEntity.class, elem));
+			}
+			((EventsEntity) valToReturn).setListOfParticipants(convertedList);
 		} else if (clazz == RegistrationEntity.class && value instanceof RegistrationBean) {
 			valToReturn = new RegistrationEntity();
 		} else if (clazz == ParticipantsEntity.class && value instanceof ParticipantBean) {

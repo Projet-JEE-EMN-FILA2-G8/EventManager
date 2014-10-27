@@ -10,6 +10,7 @@ import org.junit.Test;
 import eventmanager.business.bean.jpa.UsersEntity;
 import eventmanager.business.persistence.PersistenceServiceProvider;
 import eventmanager.business.persistence.services.UsersPersistence;
+import eventmanager.integration.UsersServices;
 import eventmanager.integration.bean.UserBean;
 import eventmanager.integration.impl.UsersServicesImpl;
 
@@ -22,8 +23,15 @@ public class UsersServicesTest {
 	private static final String DELETED_MAIL = "deleted@gmail.com";
 	private static final String AUTHENTICATE_MAIL = "bon_jovi@gmail.com";
 	private static final String AUTHENTICATE_PWD = "itsmylife";
-	private UsersServicesImpl service;
+	
+	/**
+	 * The service to test
+	 */
+	private UsersServices service;
 
+	/**
+	 * Launched once before
+	 */
 	@BeforeClass
 	public static void setUpClass() {
 		// Inserts utiles pour certains tests
@@ -74,6 +82,9 @@ public class UsersServicesTest {
 		assertNull(PersistenceServiceProvider.getService(UsersPersistence.class).load(DELETED_MAIL));
 	}
 	
+	/**
+	 * Launched once after
+	 */
 	@AfterClass
 	public static void tearDownClass() {
 		PersistenceServiceProvider.getService(UsersPersistence.class).delete(CREATED_EMAIL);
