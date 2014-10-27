@@ -35,22 +35,39 @@ public class UsersServicesImpl implements UsersServices {
 		return false;
 	}
 
+	/** 
+	 * @param user l'user à authentifier
+	 * @return true si l'user est présent en base et si le pwd correspond
+	 * @see eventmanager.integration.UsersServices#authenticateUser(eventmanager.integration.bean.UserBean)
+	 */
 	@Override
 	public boolean authenticateUser(UserBean user) {
-		// TODO Auto-generated method stub
+		if (user.getEmail() != null && user.getPwd() != null) {
+			UsersEntity userEntity = dao.load(user.getEmail());
+			return userEntity != null && userEntity.getPwd().equals(user.getPwd());
+		}
 		return false;
 	}
 
+	/**
+	 * @param l'user à mettre à jour
+	 * @return true si l'user a bien été mis à jour
+	 * @see eventmanager.integration.UsersServices#updatePwd(eventmanager.integration.bean.UserBean)
+	 */
 	@Override
 	public boolean updatePwd(UserBean user) {
-		// TODO Auto-generated method stub
+		UsersEntity userEntity = dao.load(user.getEmail());
+		if (userEntity != null) {
+			userEntity.setPwd(user.getPwd());
+			dao.save(userEntity);
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean deleteUser(UserBean user) {
-		// TODO Auto-generated method stub
-		return false;
+		return dao.delete(user.getEmail());
 	}
 
 }
