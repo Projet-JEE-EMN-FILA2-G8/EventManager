@@ -8,13 +8,25 @@ package eventmanager.business.bean.jpa;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 //import javax.validation.constraints.* ;
 //import org.hibernate.validator.constraints.* ;
-
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.*;
 
 /**
  * Persistent class for entity stored in table "EVENTS"
@@ -28,7 +40,7 @@ import javax.persistence.*;
 // Define named queries here
 @NamedQueries ( {
   @NamedQuery ( name="EventsEntity.countAll", query="SELECT COUNT(x) FROM EventsEntity x" ),
-  @NamedQuery ( name="EventsEntity.selectByUser", query="SELECT * FROM EventsEntity x WHERE x.users == :users")
+  @NamedQuery ( name="EventsEntity.selectByUser", query="SELECT x FROM EventsEntity x WHERE x.users = :users")
 } )
 public class EventsEntity implements Serializable {
 
@@ -72,7 +84,7 @@ public class EventsEntity implements Serializable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToMany(targetEntity=ParticipantsEntity.class)
+    @ManyToMany(targetEntity=ParticipantsEntity.class, fetch=FetchType.EAGER)
     @JoinTable(name="REGISTRATION", 
       joinColumns=@JoinColumn(name="IDEVENT", referencedColumnName="ID"),
       inverseJoinColumns=@JoinColumn(name="IDPARTICIPANT", referencedColumnName="ID")

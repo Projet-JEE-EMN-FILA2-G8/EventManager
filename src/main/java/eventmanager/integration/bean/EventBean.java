@@ -15,7 +15,7 @@ public class EventBean extends AbstractBean {
 	private static final long serialVersionUID = -4164191614723734898L;
 	
 	/**
-	 * L'id de l'event, utilisé dans l'URL
+	 * L'id de l'event, utilisé par l'URL.
 	 */
 	private Integer id;
 	
@@ -52,12 +52,6 @@ public class EventBean extends AbstractBean {
 	 */
 	private List<ParticipantBean> listParticipants;
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 	public String getAdresse() {
 		return adresse;
 	}
@@ -105,6 +99,12 @@ public class EventBean extends AbstractBean {
 	}
 	public void setHote(UserBean hote) {
 		this.hote = hote;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }

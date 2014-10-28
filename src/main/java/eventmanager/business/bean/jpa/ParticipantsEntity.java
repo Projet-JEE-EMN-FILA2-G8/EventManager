@@ -61,7 +61,7 @@ public class ParticipantsEntity implements Serializable {
     //----------------------------------------------------------------------
     // ENTITY LINKS ( RELATIONSHIP )
     //----------------------------------------------------------------------
-    @ManyToMany(mappedBy="listOfParticipants", targetEntity=EventsEntity.class)
+    @ManyToMany(mappedBy="listOfParticipants", targetEntity=EventsEntity.class, fetch=FetchType.EAGER)
     private List<EventsEntity> listOfEvents;
 
 

@@ -13,7 +13,7 @@ public interface EventsServices {
 	 * @param event
 	 * @return
 	 */
-	public boolean createEvent(EventBean event);
+	public EventBean createEvent(EventBean event);
 	/**
 	 * @param event
 	 * @return

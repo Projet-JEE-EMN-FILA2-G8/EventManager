@@ -42,7 +42,7 @@ public class BeanConverter implements Converter {
 		} else if (clazz == EventBean.class && value instanceof EventsEntity) {
 			valToReturn = new EventBean();
 			List<ParticipantsEntity> listToConvert = ((EventsEntity) value).getListOfParticipants();
-			if (listToConvert != null) {
+			if (listToConvert != null && !listToConvert.isEmpty()) {
 				List<ParticipantBean> convertedList = new ArrayList<ParticipantBean>();
 				for (ParticipantsEntity elem : listToConvert) {
 					convertedList.add((ParticipantBean) convert(ParticipantBean.class, elem));
@@ -55,26 +55,26 @@ public class BeanConverter implements Converter {
 			valToReturn = new RegistrationEntity();
 		} else if (clazz == ParticipantsEntity.class && value instanceof ParticipantBean) {
 			valToReturn = new ParticipantsEntity();
-			List<EventBean> listToConvert = ((ParticipantBean) value).getListEvents();
-			
-			if (listToConvert != null) {
-				List<EventsEntity> convertedList = new ArrayList<EventsEntity>();
-				for (EventBean elem : listToConvert) {
-					convertedList.add((EventsEntity) convert(EventsEntity.class, elem));
-				}
-				((ParticipantsEntity) valToReturn).setListOfEvents(convertedList);
-			}
+//			List<EventBean> listToConvert = ((ParticipantBean) value).getListEvents();
+//			
+//			if (listToConvert != null) {
+//				List<EventsEntity> convertedList = new ArrayList<EventsEntity>();
+//				for (EventBean elem : listToConvert) {
+//					convertedList.add((EventsEntity) convert(EventsEntity.class, elem));
+//				}
+//				((ParticipantsEntity) valToReturn).setListOfEvents(convertedList);
+//			}
 		} else if (clazz == ParticipantBean.class && value instanceof ParticipantsEntity) {
 			valToReturn = new ParticipantBean();
-			List<EventsEntity> listToConvert = ((ParticipantsEntity) value).getListOfEvents();
-			
-			if (listToConvert != null) {
-				List<EventBean> convertedList = new ArrayList<EventBean>();
-				for (EventsEntity elem : listToConvert) {
-					convertedList.add((EventBean) convert(EventBean.class, elem));
-				}
-				((ParticipantBean) valToReturn).setListEvents(convertedList);
-			}
+//			List<EventsEntity> listToConvert = ((ParticipantsEntity) value).getListOfEvents();
+//			
+//			if (listToConvert != null) {
+//				List<EventBean> convertedList = new ArrayList<EventBean>();
+//				for (EventsEntity elem : listToConvert) {
+//					convertedList.add((EventBean) convert(EventBean.class, elem));
+//				}
+//				((ParticipantBean) valToReturn).setListEvents(convertedList);
+//			}
 		}
 		try {
 			BeanUtils.copyProperties(valToReturn, value);

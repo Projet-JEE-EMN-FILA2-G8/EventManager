@@ -56,5 +56,14 @@ public class UserBean extends AbstractBean {
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
 	}
+	
+	/**
+	 * @param userBean l'UserBean à comparer
+	 * @return true si les users ont le même email et le même password
+	 */
+	public boolean equals(UserBean userBean) {
+		return this.getEmail().equals(userBean.getEmail()) && 
+				this.getPwd().equals(userBean.getPwd());
+	}
 
 }

@@ -23,7 +23,7 @@ import eventmanager.integration.bean.UserBean;
 import eventmanager.tools.BeanConverter;
 
 public class EventsServicesImpl implements EventsServices {
-	private static final String URL_FORMAT_EVENTMANAGER = "http://localhost:8080/eventmanager/events.do?event=";
+	public static final String URL_FORMAT_EVENTMANAGER = "http://localhost:8080/eventmanager/events.do?event=";
 	private EventsPersistence daoEvents;
 	private ParticipantsPersistence daoParticipants;
 	private ConvertUtilsBean beanConverter;
@@ -39,14 +39,14 @@ public class EventsServicesImpl implements EventsServices {
 	}
 	
 	@Override
-	public boolean createEvent(EventBean event) {
+	public EventBean createEvent(EventBean event) {
 		if (event.getNom() != null && event.getHote() != null) {
 			EventsEntity eventEntity = (EventsEntity) beanConverter.convert(event, EventsEntity.class);
 			eventEntity.setListOfParticipants(new ArrayList<ParticipantsEntity>());
-			daoEvents.save(eventEntity);
-			return true;
+			EventsEntity createdEvent = daoEvents.save(eventEntity);
+			return (EventBean) beanConverter.convert(createdEvent, EventBean.class);
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class EventsServicesImpl implements EventsServices {
 	public List<EventBean> getHostedEvents(UserBean user) {
 		Map<String, Object> queryParams = new HashMap<String, Object>();
 		queryParams.put("users", beanConverter.convert(user, UsersEntity.class));
-		List<EventsEntity> resultsList = daoEvents.loadByNamedQuery("selectByUser", queryParams);
+		List<EventsEntity> resultsList = daoEvents.loadByNamedQuery("EventsEntity.selectByUser", queryParams);
 		
 		if (resultsList != null) {
 			List<EventBean> listToReturn = new ArrayList<EventBean>();
@@ -92,8 +92,10 @@ public class EventsServicesImpl implements EventsServices {
 		if (participant != null && event != null) {
 			ParticipantsEntity participantEntity = (ParticipantsEntity) beanConverter.convert(participant, ParticipantsEntity.class);
 			participantEntity = daoParticipants.save(participantEntity);
+			
 			EventsEntity eventEntity = daoEvents.load(event.getId());
 			eventEntity.getListOfParticipants().add(participantEntity);
+			
 			daoEvents.save(eventEntity);
 			return true;
 		}
@@ -102,7 +104,10 @@ public class EventsServicesImpl implements EventsServices {
 
 	@Override
 	public EventBean getEventByUrl(URL url) {
-		String idEvent = url.getQuery().split("=")[1];
+		String idEvent = null;
+		if (url != null) {
+			idEvent = url.getQuery().split("=")[1];
+		}
 		if (idEvent != null) {
 			return (EventBean) beanConverter.convert(daoEvents.load(Integer.parseInt(idEvent)), EventBean.class);
 		}

@@ -1,6 +1,5 @@
 package eventmanager.integration.bean;
 
-import java.util.List;
 
 public class ParticipantBean extends AbstractBean {
 
@@ -8,7 +7,12 @@ public class ParticipantBean extends AbstractBean {
 	 * SerialID
 	 */
 	private static final long serialVersionUID = -4872909996952632899L;
-
+	
+	/**
+	 * id en base du participant - Pose problème : l'email n'est pas considéré comme clé primaire
+	 * TODO : Peut-être devrions nous supprimer cet id pour utiliser l'email.
+	 */
+	private Integer id;
 	/**
 	 * 
 	 */
@@ -25,10 +29,6 @@ public class ParticipantBean extends AbstractBean {
 	 * 
 	 */
 	private String societe;
-	/**
-	 * La liste des évenements auquels la personne participe.
-	 */
-	private List<EventBean> listEvents;
 	
 	public String getNom() {
 		return nom;
@@ -57,11 +57,11 @@ public class ParticipantBean extends AbstractBean {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public List<EventBean> getListEvents() {
-		return listEvents;
+	public Integer getId() {
+		return id;
 	}
-	public void setListEvents(List<EventBean> listEvents) {
-		this.listEvents = listEvents;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }
