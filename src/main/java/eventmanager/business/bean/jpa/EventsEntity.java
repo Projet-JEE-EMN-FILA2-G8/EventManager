@@ -58,7 +58,7 @@ public class EventsEntity implements Serializable {
     //----------------------------------------------------------------------
     // ENTITY DATA FIELDS 
     //----------------------------------------------------------------------    
-    @Column(name="ADRESSE", nullable=false, length=50)
+    @Column(name="ADRESSE", nullable=false, length=100)
     private String     adresse      ;
 
     @Temporal(TemporalType.DATE)
@@ -72,10 +72,10 @@ public class EventsEntity implements Serializable {
     @Column(name="VISIBLE", nullable=false)
     private short      visible      ;
 
-    @Column(name="NOM", nullable=false, length=20)
+    @Column(name="NOM", nullable=false, length=50)
     private String     nom          ;
 
-    @Column(name="DESCRIPTION", length=50)
+    @Column(name="DESCRIPTION", length=100)
     private String     description  ;
 
 	// "hote" (column "HOTE") is not defined by itself because used as FK in a link 

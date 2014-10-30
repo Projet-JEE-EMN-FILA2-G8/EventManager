@@ -1,8 +1,8 @@
 package eventmanager.integration;
 
-import java.net.URL;
 import java.util.List;
 
+import eventmanager.business.bean.jpa.ParticipantsEntity;
 import eventmanager.integration.bean.EventBean;
 import eventmanager.integration.bean.ParticipantBean;
 import eventmanager.integration.bean.UserBean;
@@ -14,13 +14,13 @@ public interface EventsServices {
 	 * @param event l'evenement à créér
 	 * @return true si la création a réussi
 	 */
-	public EventBean createEvent(EventBean event);
+	public EventBean createOrUpdateEvent(EventBean event);
 	/**
 	 * Publie un evenement. Marque l'indicateur visible à True et génère une URL
 	 * @param event l'evenement à publier
 	 * @return
 	 */
-	public URL publishEvent(EventBean event);
+	public boolean publishEvent(EventBean event);
 	/**
 	 * Retourne une liste d'evenement dont l'hôte est l'utilisateur passé en paramètre
 	 * @param user l'utilisateur hôte des evenements à rechercher
@@ -28,10 +28,10 @@ public interface EventsServices {
 	 */
 	public List<EventBean> getHostedEvents(UserBean user);
 	/**
-	 * @param url l'URL de l'evenement
-	 * @return le bean de l'evenement pointé par l'url, null s'il n'existe pas
+	 * @param id l'id de l'evenement
+	 * @return le bean de l'evenement pointé par l'id (récupéré depuis une URL), null s'il n'existe pas ou s'il n'a pas été publié
 	 */
-	public EventBean getEventByUrl(URL url);
+	public EventBean getEventById(int idEvent);
 	/**
 	 * Enregistre un participant à un evenement
 	 * @param event l'evenement auquel le participant s'inscrit
@@ -39,5 +39,12 @@ public interface EventsServices {
 	 * @return true si l'inscription a réussi
 	 */
 	public boolean registerParticipant(EventBean event, ParticipantBean participant);
+	
+	/**
+	 * @param event L'evenement
+	 * @param participant le participant
+	 * @return true si le participant est inscrit à l'evenement
+	 */
+	public boolean isRegistered(EventBean event, ParticipantsEntity participant);
 
 }

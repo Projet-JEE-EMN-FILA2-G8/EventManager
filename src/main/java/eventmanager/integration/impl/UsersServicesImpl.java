@@ -35,11 +35,6 @@ public class UsersServicesImpl implements UsersServices {
 		return false;
 	}
 
-	/** 
-	 * @param user l'user à authentifier
-	 * @return true si l'user est présent en base et si le pwd correspond
-	 * @see eventmanager.integration.UsersServices#authenticateUser(eventmanager.integration.bean.UserBean)
-	 */
 	@Override
 	public boolean authenticateUser(UserBean user) {
 		if (user.getEmail() != null && user.getPwd() != null) {
@@ -49,11 +44,6 @@ public class UsersServicesImpl implements UsersServices {
 		return false;
 	}
 
-	/**
-	 * @param l'user à mettre à jour
-	 * @return true si l'user a bien été mis à jour
-	 * @see eventmanager.integration.UsersServices#updatePwd(eventmanager.integration.bean.UserBean)
-	 */
 	@Override
 	public boolean updatePwd(UserBean user) {
 		UsersEntity userEntity = dao.load(user.getEmail());

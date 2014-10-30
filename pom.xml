@@ -79,6 +79,12 @@
 			<artifactId>slf4j-simple</artifactId> 
 			<version>1.7.5</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.4.7</version>
+			<scope>test</scope>
+		</dependency>
 		
 		<!-- ==================== DEPENDENCIES for "TEST" SCOPE ==================== -->
 		<!-- Dependencies for Unit Testing -->

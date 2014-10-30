@@ -3,9 +3,8 @@ package eventmanager.test.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +63,7 @@ public class EventsServicesTest {
 		eventBean.setVisible(false);
 		eventBean.setListParticipants(new ArrayList<ParticipantBean>());
 		
-		EventBean insertedBean = eventsServices.createEvent(eventBean);
+		EventBean insertedBean = eventsServices.createOrUpdateEvent(eventBean);
 		assertNotNull(insertedBean);
 		eventsToDelete.add(insertedBean);
 		assertTrue("Hôte enregistré", eventBean.getHote().equals(insertedBean.getHote()));
@@ -75,11 +74,19 @@ public class EventsServicesTest {
 	@Test
 	public void testRegisterParticipant() {
 		EventsPersistence daoEvents = PersistenceServiceProvider.getService(EventsPersistence.class, PersistenceConfig.JPA);
+		// Event n°1
 		EventsEntity eventToRegister = new EventsEntity();
 		eventToRegister.setDatedeb(new Date());
 		eventToRegister.setDatefin(new Date());
 		eventToRegister.setNom("Event Test");
 		eventToRegister.setAdresse("Eclipse");
+		
+		// Event n°2
+		EventsEntity eventToRegister2 = new EventsEntity();
+		eventToRegister2.setDatedeb(new Date());
+		eventToRegister2.setDatefin(new Date());
+		eventToRegister2.setNom("Event Test n°2");
+		eventToRegister2.setAdresse("Eclipse");
 		
 		UsersEntity host = new UsersEntity();
 		host.setEmail("test_reg@gmail.com");
@@ -88,12 +95,16 @@ public class EventsServicesTest {
 		host = daoUsers.save(host);
 		eventToRegister.setUsers(host);
 		eventToRegister.setVisible((short) 1);
+		eventToRegister2.setUsers(host);
+		eventToRegister2.setVisible((short) 1);
 		
 		eventToRegister = daoEvents.save(eventToRegister);
+		eventToRegister2 = daoEvents.save(eventToRegister2);
 		ConvertUtilsBean converter = new ConvertUtilsBean();
 		converter.register(new BeanConverter(), EventBean.class);
 		
 		EventBean convertedBean = (EventBean) converter.convert(eventToRegister, EventBean.class);
+		EventBean convertedBean2 = (EventBean) converter.convert(eventToRegister2, EventBean.class);
 
 		ParticipantBean participant = new ParticipantBean();
 		participant.setEmail("mail@mail.com");
@@ -101,14 +112,26 @@ public class EventsServicesTest {
 		participant.setPrenom("test");
 		participant.setSociete("test");
 		
+		// participant registration to both events 
 		eventsServices.registerParticipant(convertedBean, participant);
+		eventsServices.registerParticipant(convertedBean2, participant);
 		
+		// Retrieving events from database
 		EventsEntity createdEvent = daoEvents.load(convertedBean.getId());
+		EventsEntity createdEvent2 = daoEvents.load(convertedBean2.getId());
 		eventsToDelete.add((EventBean) converter.convert(createdEvent, EventBean.class));
+		eventsToDelete.add((EventBean) converter.convert(createdEvent2, EventBean.class));
 		
 		assertNotNull(createdEvent);
+		assertNotNull(createdEvent2);
 		assertNotNull(createdEvent.getListOfParticipants());
-		assertEquals("Participant enregistré", participant.getNom(), createdEvent.getListOfParticipants().get(0).getNom());
+		assertNotNull(createdEvent2.getListOfParticipants());
+		try {
+			assertEquals("Participant enregistré", participant.getNom(), createdEvent.getListOfParticipants().get(0).getNom());
+			assertEquals("Participant enregistré", participant.getEmail(), createdEvent2.getListOfParticipants().get(0).getEmail());
+		} catch (IndexOutOfBoundsException e) {
+			fail("Participants non présents dans la liste des participants");
+		}
 	}
 	
 	@Test
@@ -176,35 +199,39 @@ public class EventsServicesTest {
 		EventBean convertedBean = (EventBean) converter.convert(eventToRegister, EventBean.class);
 		eventsToDelete.add(convertedBean);
 		
-		URL url = eventsServices.publishEvent(convertedBean);
-		assertEquals("URL correcte", EventsServicesImpl.URL_FORMAT_EVENTMANAGER + convertedBean.getId(), url.toString());
+		assertTrue(eventsServices.publishEvent(convertedBean));
 	}
 	
 	@Test
-	public void testGetEventByUrl() throws MalformedURLException {
+	public void testGetEventById() {
 		EventsPersistence daoEvents = PersistenceServiceProvider.getService(EventsPersistence.class, PersistenceConfig.JPA);
-		EventsEntity eventToRegister = new EventsEntity();
+		EventBean eventToRegister = new EventBean();
 		eventToRegister.setDatedeb(new Date());
 		eventToRegister.setDatefin(new Date());
-		eventToRegister.setNom("Event Test");
+		eventToRegister.setNom("Event Test getById");
 		eventToRegister.setAdresse("Eclipse");
+
+		ConvertUtilsBean converter = new ConvertUtilsBean();
+		converter.register(new BeanConverter(), EventBean.class);
+		converter.register(new BeanConverter(), EventsEntity.class);
+		converter.register(new BeanConverter(), UserBean.class);
+		converter.register(new BeanConverter(), UsersEntity.class);
 		
 		UsersEntity host = new UsersEntity();
 		host.setEmail(HOST_GET);
 		host.setPwd(PASSWORD);
+		
 		UsersPersistence daoUsers = PersistenceServiceProvider.getService(UsersPersistence.class, PersistenceConfig.JPA);
-		host = daoUsers.save(host);
-		eventToRegister.setUsers(host);
-		eventToRegister.setVisible((short) 0);
+		daoUsers.save(host);
+		eventToRegister.setHote(new UserBean(HOST_GET, PASSWORD));
+		eventToRegister.setVisible(true);
 		
-		eventToRegister = daoEvents.save(eventToRegister);
-		ConvertUtilsBean converter = new ConvertUtilsBean();
-		converter.register(new BeanConverter(), EventBean.class);
+		EventsEntity eventRegistered = daoEvents.save((EventsEntity) converter.convert(eventToRegister, EventsEntity.class));
 		
-		EventBean convertedBean = (EventBean) converter.convert(eventToRegister, EventBean.class);
+		EventBean convertedBean = (EventBean) converter.convert(eventRegistered, EventBean.class);
 		eventsToDelete.add(convertedBean);
 		
-		EventBean eventByUrl = eventsServices.getEventByUrl(new URL(EventsServicesImpl.URL_FORMAT_EVENTMANAGER + convertedBean.getId()));
+		EventBean eventByUrl = eventsServices.getEventById(convertedBean.getId());
 		assertNotNull(eventByUrl);
 		assertEquals("Hôte récupé", host.getEmail(), eventByUrl.getHote().getEmail());
 	}
@@ -219,10 +246,20 @@ public class EventsServicesTest {
 			daoEvents.delete(event.getId());
 			if (event.getListParticipants() != null) {
 				for (ParticipantBean participant : event.getListParticipants()) {
-					if (participant != null) daoParticipants.delete(participant.getId());
+					if (participant != null) {
+						try {
+							daoParticipants.delete(participant.getId());
+						} catch (Exception e) {
+							System.out.println("Exception suppression participant - Contrainte de clé");
+						}
+					}
 				}
 			}
-			daoUsers.delete(event.getHote().getEmail());
+			try {
+				daoUsers.delete(event.getHote().getEmail());
+			} catch (Exception e) {
+				System.out.println("Exception suppression user - Contrainte de clé");
+			}
 		}
 	}
 
