@@ -44,15 +44,43 @@ public class EditEventController extends AbstractController {
 	protected void process(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws ServletException, IOException {
 		
 		String servlet = request.getServletPath();
+		Boolean isEditEventServlet = Constants.SERVLET_EDIT_EVENT.equals(servlet);
+		
 		String parametersString = request.getPathInfo();
-		String[] parameters = parametersString!=null ? parametersString.split("/") : new String[]{"/1"};
+		String[] parameters = parametersString!=null ? parametersString.split("/") : new String[]{};
 		String eventId = parameters.length > 1 ? parameters[1] : null;
 		
 		EventsServices eServices = new EventsServicesImpl();
-
-		// Récupération de l'evenement si on est en édition
-		EventBean eventBean = (EventBean) (request.getAttribute("event") != null?
-					request.getAttribute("event"):new EventBean());
+		EventBean eventBean = new EventBean();
+		
+		
+		
+		// Récupération de l'evenement si on est en édition et vérification de la présence d'un ID dans l'url
+		
+		if(isEditEventServlet) {
+			if(eventId!=null) {
+				try {
+					eventBean = eServices.getEventById(Integer.parseInt(eventId));
+				} catch (Exception e) {
+					// TODO error handling + log4j here
+					e.printStackTrace();
+					// L'event n'a pas pu être récupéré, on redirige donc vers la page de création
+					localRedirect(response, Constants.SERVLET_CREATE_EVENT); 
+					return;
+				}
+			} else {
+				localRedirect(response, Constants.SERVLET_CREATE_EVENT); 
+				return;
+			}
+		} else {
+			if(eventId!=null) { // La page de création ne doit pas avoir d'ID 
+				localRedirect(response, Constants.SERVLET_CREATE_EVENT); 
+				return;
+			}
+		}
+		request.setAttribute("event", eventBean);
+		
+		
 		
 		if(method==HttpMethod.POST) {
 			
@@ -63,16 +91,13 @@ public class EditEventController extends AbstractController {
 			String datefin = request.getParameter("datefin");
 			
 			try {
-				eventBean.setId(eventId == null || "".equals(eventId)?
-						null:
-						Integer.parseInt(eventId));
+				eventBean.setId((eventId == null || "".equals(eventId)) ? null : Integer.parseInt(eventId));
 				eventBean.setNom(nom);
 				eventBean.setDescription(description);
 				eventBean.setAdresse(adresse);
 				
-				// TODO : Set dates as required
 				try {
-					eventBean.setDatedeb(datedeb == null || "".equals(datedeb)?
+					eventBean.setDatedeb(datedeb == null || "".equals(datedeb) ? 
 							new Date():
 							DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).parse(datedeb));
 				} catch (ParseException e) {
@@ -92,37 +117,23 @@ public class EditEventController extends AbstractController {
 				// Récupération de l'utilisateur créateur de l'evenement
 				eventBean.setHote((UserBean) request.getSession().getAttribute("user"));
 				
-				// TODO si cette methode renvoie null, l'insertion  a fail
-				eServices.createOrUpdateEvent(eventBean);
+				// si cette methode renvoie null, l'insertion  a fail
+				if(eServices.createOrUpdateEvent(eventBean) == null) {
+					throw new Exception();
+				}
+				
+				localRedirect(response, Constants.SERVLET_EVENT_LIST);
 			}
 			catch(Exception e) {
 				e.printStackTrace();
 				// TODO log4j needed here
+				request.setAttribute("error", isEditEventServlet ? "modification" : "création");
 			}
-			
-			localRedirect(response, Constants.SERVLET_EVENT_LIST);
 		}
-		else
-		{
-			System.out.println(Constants.SERVLET_EDIT_EVENT + ":" + (servlet));
-			if(Constants.SERVLET_EDIT_EVENT.equals(servlet)) {
-				if(eventId!=null) {
-					try {
-						eventBean = eServices.getEventById(Integer.parseInt(eventId));
-					} catch (Exception e) {
-						// TODO error handling + log4j here
-						e.printStackTrace();
-						localRedirect(response, Constants.SERVLET_CREATE_EVENT);
-					}
-					request.setAttribute("event", eventBean);
-				}
-				else
-				{
-					localRedirect(response, Constants.SERVLET_CREATE_EVENT);
-				}
-			}
-			showEditEventPage(request, response);
-		}
+		
+		
+		showEditEventPage(request, response);
+		
 	}
 	
 	private void showEditEventPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

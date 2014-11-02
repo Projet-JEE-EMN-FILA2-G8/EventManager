@@ -49,13 +49,13 @@
 										<td>${event.datedebToString}</td>
 										<td>${event.datefinToString}</td>
 										<td>
-											<form action="?action=publish&eventId=${event.id}" method="post">
-												<a href="<c:url value="/Event/${event.id}"/>" class="btn btn-default">Voir</a>
+											<form action="?action=publish&eventId=${event.id}" method="post">											
 												<a href="<c:url value="/EditEvent/${event.id}"/>" class="btn btn-default">Editer</a>
 												<c:if test="${not event.visible}">
 													<button class="btn btn-primary" type="submit">Publier</button>
 												</c:if>
 												<c:if test="${event.visible}">
+													<a href="<c:url value="/Event/${event.id}"/>" class="btn btn-default">Voir</a>
 													<a href="<c:url value="/Event/${event.id}"/>"><i>Publié</i></a>
 												</c:if>
 											</form>

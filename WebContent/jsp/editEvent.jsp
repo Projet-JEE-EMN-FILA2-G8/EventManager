@@ -43,34 +43,46 @@
 				</p>
 			</div>
 			<form class="form-horizontal" role="form" action="" method="post">
+				
+				<c:if test="${not empty requestScope.error}">
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+	      					<font color=red>
+								Une erreur est survenue lors de la ${requestScope.error} de l'évènement.<br>
+								<i>Vous-pouvez essayer de recommencer en entrant des paramètres valides.</i>
+							</font>
+	    				</div>
+    				</div>
+				</c:if>
+			
 				<div class="form-group">
 					<label for="nom" class="col-sm-2 control-label">NOM</label>
 			    	<div class="col-sm-6">
-			      		<input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" maxlength="20" value="${event.nom}">
+			      		<input type="text" class="form-control" id="nom" name="nom" placeholder="Nom"  required="required" maxlength="50" value="${event.nom}">
 			    	</div>
 				</div>
 				<div class="form-group">
 					<label for="description" class="col-sm-2 control-label">DESCRIPTION</label>
 					<div class="col-sm-6">
-			      		<input type="text" class="form-control" id="description" name="description" placeholder="Description" maxlength="50" value="${event.description}">
+			      		<input type="text" class="form-control" id="description" name="description" placeholder="Description" maxlength="100" value="${event.description}">
 			    	</div>
 				</div>
 				<div class="form-group">
 					<label for="adresse" class="col-sm-2 control-label">ADRESSE</label>
 					<div class="col-sm-6">
-			      		<input type="text" class="form-control" id="adresse" name="adresse" placeholder="Adresse" maxlength="20" value="${event.adresse}">
+			      		<input type="text" class="form-control" id="adresse" name="adresse" placeholder="Adresse" maxlength="100" value="${event.adresse}">
 			    	</div>
 				</div>
 				<div class="form-group">
 					<label for="datedeb" class="col-sm-2 control-label">DEBUT</label>
 					<div class="col-sm-6">
-			      		<input class="form-control datetime" id="datedeb" name="datedeb" placeholder="Date de début" value="${event.datedebToString}">
+			      		<input class="form-control datetime" id="datedeb" name="datedeb" placeholder="Date de début" required="required" value="${event.datedebToString}">
 			    	</div>
 				</div>
 				<div class="form-group">
 					<label for="datefin" class="col-sm-2 control-label">FIN</label>
 					<div class="col-sm-6">
-			      		<input class="form-control datetime" id="datefin" name="datefin" placeholder="Date de fin" value="${event.datefinToString}">
+			      		<input class="form-control datetime" id="datefin" name="datefin" placeholder="Date de fin" required="required" value="${event.datefinToString}">
 			    	</div>
 				</div>
 				<div class="form-group">

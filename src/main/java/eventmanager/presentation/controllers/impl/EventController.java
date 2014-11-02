@@ -44,68 +44,79 @@ public class EventController extends AbstractController {
 	 */
 	@Override
 	protected void process(HttpServletRequest request, HttpServletResponse response, HttpMethod method)	throws ServletException, IOException {
-
 		
 		String[] parameters = request.getPathInfo().split("/");
 		String eventId = parameters.length > 1 ? parameters[1] : null;
-		
-		EventsServices eServices = new EventsServicesImpl();
-		EventBean eventBean = new EventBean();
-		
-		try {
-			eventBean = eServices.getEventById(Integer.parseInt(eventId));
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO log4j here - il faut distinguer un plantage couche service d'une erreur
-			// de parsing
-		}
 				
-		request.setAttribute("event", eventBean);
-		request.setAttribute("eventId", Long.parseLong(eventId));
-		request.setAttribute("eventurl", request.getRequestURL());
-		
-		
-		if(method==HttpMethod.POST) {
+		if(eventId!=null) {
 			
-			String nom = request.getParameter("nom");	
-			String prenom = request.getParameter("prenom");	
-			String email = request.getParameter("email");	
-			String societe = request.getParameter("societe");	
+			EventsServices eServices = new EventsServicesImpl();
+			EventBean eventBean = new EventBean();
 			
-			try{
-				
-				ParticipantBean participantBean = new ParticipantBean();
-				participantBean.setNom(nom);
-				participantBean.setPrenom(prenom);
-				participantBean.setEmail(email);
-				participantBean.setSociete(societe);
-				
-				boolean registered = eServices.registerParticipant(eventBean, participantBean);
-				
-				request.setAttribute("registered", registered);
-				
-				if(!registered) {
-					request.setAttribute("alreadyRegistered", true);
-				}
-				
-				HttpSession session = request.getSession(true);
-				@SuppressWarnings("unchecked")
-				TreeMap<Long, Boolean> participationMap = (TreeMap<Long, Boolean>)session.getAttribute("participateToEvent");
-				if(participationMap==null)
-				{
-					participationMap = new TreeMap<Long, Boolean>();
-				}
-				participationMap.put(Long.parseLong(eventId), true);
-				session.setAttribute("participateToEvent", participationMap);
-				
-				
-			}catch(Exception ex) {
-				request.setAttribute("errorOccured", true);
+			try {
+				eventBean = eServices.getEventById(Integer.parseInt(eventId));
+			} catch (Exception e) {
+				e.printStackTrace();
+				request.setAttribute("eventError", true);
+				// TODO log4j here - il faut distinguer un plantage couche service d'une erreur de parsing
 			}
+			
+			
+			if ((eventBean != null) && (eventBean.isVisible())) {
+				
+				request.setAttribute("event", eventBean);
+				request.setAttribute("eventId", Long.parseLong(eventId));
+				request.setAttribute("eventurl", request.getRequestURL());
+				
+				if(method==HttpMethod.POST) {
+					
+					String nom = request.getParameter("nom");	
+					String prenom = request.getParameter("prenom");	
+					String email = request.getParameter("email");	
+					String societe = request.getParameter("societe");	
+					
+					try{
+						
+						ParticipantBean participantBean = new ParticipantBean();
+						participantBean.setNom(nom);
+						participantBean.setPrenom(prenom);
+						participantBean.setEmail(email);
+						participantBean.setSociete(societe);
+						
+						boolean registered = eServices.registerParticipant(eventBean, participantBean);
+						
+						request.setAttribute("registered", registered);
+						
+						if(!registered) {
+							request.setAttribute("alreadyRegistered", true);
+						}
+						
+						HttpSession session = request.getSession(true);
+						@SuppressWarnings("unchecked")
+						TreeMap<Long, Boolean> participationMap = (TreeMap<Long, Boolean>)session.getAttribute("participateToEvent");
+						if(participationMap==null)
+						{
+							participationMap = new TreeMap<Long, Boolean>();
+						}
+						participationMap.put(Long.parseLong(eventId), true);
+						session.setAttribute("participateToEvent", participationMap);
+						
+						
+					}catch(Exception ex) {
+						request.setAttribute("errorOccured", true);
+					}
+				}
+				
+			} else {
+				request.setAttribute("hiddenOrUnknownEvent", true);
+			}
+			
+			showEventPage(request, response);
 		}
-		
-		showEventPage(request, response);
-		
+		else
+		{
+			localRedirect(response, Constants.SERVLET_EVENT_LIST);
+		}
 	}
 	
 	private void showEventPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
