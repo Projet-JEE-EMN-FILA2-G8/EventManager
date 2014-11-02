@@ -1,7 +1,6 @@
 package eventmanager.presentation.controllers.impl;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,9 +47,7 @@ public class LoginController extends AbstractController {
 			showMainPage(response);
 		}
 		else {
-			
-			String message=null;
-			
+				
 			if(method==HttpMethod.POST) {
 				
 				String user = request.getParameter("email");
@@ -59,28 +56,27 @@ public class LoginController extends AbstractController {
 		        UsersServices uServices = new UsersServicesImpl();
 		        UserBean userBean = new UserBean(user, pwd);
 		        
-		        if(uServices.authenticateUser(userBean)){
-		            HttpSession session = request.getSession();
-		            session.setAttribute("user", userBean);
-		            session.setMaxInactiveInterval(30*60);
-		            showMainPage(response);
-		            return;
-		        }else {
-		        	message = "<font color=red>L'identifiant ou le mot de passe est incorrect</font>";
+		        try {
+		        	if(uServices.authenticateUser(userBean)){
+			            HttpSession session = request.getSession();
+			            session.setAttribute("user", userBean);
+			            session.setMaxInactiveInterval(30*60);
+			            showMainPage(response);
+			            return;
+			        }else {
+			        	request.setAttribute("badLoginOrPassword", true);
+			        }
+		        }catch(Exception e) {
+		        	request.setAttribute("errorOccured", true);
 		        }
 			} 
-			
-			showLoginPage(request, response, message);		
+			showLoginPage(request, response);		
 		}
 	}
 	
-	private void showLoginPage(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
-		request.setAttribute("isLoginPage", true);
-		RequestDispatcher rd = this.context.getRequestDispatcher(Constants.JSP_LOGIN);
-		if( !(message== null || message.isEmpty()) ) {
-			PrintWriter out= response.getWriter();
-	        out.println(message);
-		}		
+	private void showLoginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//request.setAttribute("isLoginPage", true);
+		RequestDispatcher rd = this.context.getRequestDispatcher(Constants.JSP_LOGIN);	
 		rd.include(request, response);
 	}
 	

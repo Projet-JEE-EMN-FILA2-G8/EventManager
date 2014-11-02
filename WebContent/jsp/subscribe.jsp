@@ -19,22 +19,44 @@
 				<div class="form-group">
 			    	<label for="email" class="col-sm-2 control-label">Email:</label>
 			    	<div class="col-sm-3">
-			    		<input type="email" class="form-control" id="email" name="email" placeholder="Email">
+			    		<input type="email" class="form-control" id="email" name="email" required="required" placeholder="Email" maxlength="30" value="${user.email}">
 			    	</div>
 				</div>
 				<div class="form-group">
 					<label for="pwd" class="col-sm-2 control-label">Mot de passe:</label>
 					<div class="col-sm-3">
-						<input type="password" class="form-control" id="pwd" name="pwd" placeholder="Mot de passe">
+						<input type="password" class="form-control" id="pwd" name="pwd" required="required" placeholder="Mot de passe" value="${user.pwd}">
 				    </div>
 				</div>
 				<div class="form-group">
 					<label for="confirm" class="col-sm-2 control-label">Confirmer:</label>
 					<div class="col-sm-3">
-						<input type="password" class="form-control" id="confirm" name="confirm" placeholder="Mot de passe (Confimation)">
+						<input type="password" class="form-control" id="confirm" name="confirm" required="required" placeholder="Mot de passe (Confimation)">
 				    </div>
 				</div>
-				<div class="form-group">
+				<c:if test="${requestScope.notMatchingPwd}">
+					<div class="col-sm-offset-2 col-sm-10">
+      					<font color=red>
+							<i>Les mots de passe ne correspondent pas !</i>
+						</font>
+    				</div>
+				</c:if>
+				<c:if test="${requestScope.alreadyRegistered}">
+					<div class="col-sm-offset-2 col-sm-10">
+      					<font color=red>
+							<i>Vous avez déjà un compte !</i>
+						</font>
+    				</div>
+				</c:if>
+				<c:if test="${requestScope.errorOccured}">
+					<div class="col-sm-offset-2 col-sm-10">
+      					<font color=red>
+							Une erreur est survenue lors de l'inscription.<br>
+							<i>Vous-pouvez recommencer en entrant des paramètres valides.</i>
+						</font>
+    				</div>
+				</c:if>
+				<!--  <div class="form-group">
     				<div class="col-sm-offset-2 col-sm-10">
       					<div class="checkbox">
         					<label>
@@ -43,7 +65,7 @@
         					</label>
       					</div>
     				</div>
- 				</div>
+ 				</div>-->
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-2">

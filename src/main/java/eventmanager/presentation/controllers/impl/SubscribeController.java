@@ -1,7 +1,13 @@
 package eventmanager.presentation.controllers.impl;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import eventmanager.integration.UsersServices;
 import eventmanager.integration.bean.UserBean;
@@ -12,13 +18,6 @@ import eventmanager.presentation.utils.Constants;
 import eventmanager.presentation.utils.HttpMethod;
 import eventmanager.tools.MailingEngine;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 /**
  * @author Hadrien
  * 
@@ -26,7 +25,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class SubscribeController
  */
-@WebServlet(description = "Controleur pour l'enristrement des utilisateurs", urlPatterns = { "/Subscribe" })
+@WebServlet(description = "Controleur pour l'enregistrement des utilisateurs", urlPatterns = { "/Subscribe" })
 public class SubscribeController extends AbstractController {
 	private static final long serialVersionUID = 1L;
        
@@ -48,46 +47,53 @@ public class SubscribeController extends AbstractController {
 		}
 		else {
 			
-			String message=null;
-			
 			if(method==HttpMethod.POST) {
 				
 				String user = request.getParameter("email");
 		        String pwd = request.getParameter("pwd");
-		        
-		        UsersServices uServices = new UsersServicesImpl();
+		        String confirm = request.getParameter("confirm");
 		        UserBean userBean = new UserBean(user, pwd);
-		        try {
-			        if(uServices.createUser(userBean)){
-		        		HttpSession session = request.getSession();
-		        		session.setAttribute("user", userBean);
-		        		session.setMaxInactiveInterval(30*60);
-		        		// Envoi du mail de confirmation
-		        		MailingEngine.getInstance().sendUserCreationConfirmation(userBean); 
-		        		showMainPage(response);
-		        		return;
-			        } else {
-			        	message = "<font color=red>Vous avez déjà un compte !</font>";
+		        
+		        if(confirm==null || !confirm.equals(pwd)) {
+		        	
+		        	request.setAttribute("notMatchingPwd", true);
+		        	request.setAttribute("user", userBean);  // Pour la récupération des valeurs côté JSP
+		        
+		        } else {
+		        	
+		        	UsersServices uServices = new UsersServicesImpl();
+			        
+			        try {
+			        	
+				        if(uServices.createUser(userBean)){
+			        		HttpSession session = request.getSession();
+			        		session.setAttribute("user", userBean);
+			        		session.setMaxInactiveInterval(30*60);
+			        		// Envoi du mail de confirmation
+			        		MailingEngine.getInstance().sendUserCreationConfirmation(userBean); 
+			        		showMainPage(response);
+			        		return;
+			        		
+				        } else {
+				        	request.setAttribute("alreadyRegistered", true);
+				        }
+				        
+			        } catch (Exception e) {
+			        	// log4j ici
+			        	this.context.log("Impossible de creer l'user");
+			        	request.setAttribute("errorOccured", true);
 			        }
-		        } catch (Exception e) {
-		        	// log4j ici
-		        	System.out.println("Impossible de creer l'user");
-		        	message = "<font color=red>Impossible de créer le compte.</font>";
+			       
 		        }
 			} 
-			
-			showSubscribePage(request, response, message);		
+			showSubscribePage(request, response);		
 		}
 		
 	}
 	
-	private void showSubscribePage(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
-		request.setAttribute("isSubscribePage", true);
-		RequestDispatcher rd = this.context.getRequestDispatcher(Constants.JSP_SUBSCRIBE);
-		if( !(message== null || message.isEmpty()) ) {
-			PrintWriter out= response.getWriter();
-	        out.println(message);
-		}		
+	private void showSubscribePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//request.setAttribute("isSubscribePage", true);
+		RequestDispatcher rd = this.context.getRequestDispatcher(Constants.JSP_SUBSCRIBE);	
 		rd.include(request, response);
 	}
 	
