@@ -82,7 +82,7 @@ public class EventsServicesImpl implements EventsServices {
 		List<EventsEntity> resultsList = daoEvents.loadByNamedQuery(
 				SELECT_EVENT_BY_USER, queryParams);
 
-		if (resultsList != null) {
+		if (resultsList != null && !resultsList.isEmpty()) {
 			List<EventBean> listToReturn = new ArrayList<EventBean>();
 			for (EventsEntity elem : resultsList) {
 				listToReturn.add((EventBean) beanConverter.convert(elem,
@@ -161,11 +161,8 @@ public class EventsServicesImpl implements EventsServices {
 	@Override
 	public EventBean getEventById(int idEvent) {
 		EventsEntity loadedEvent = daoEvents.load(new Integer(idEvent));
-		if (loadedEvent == null)
-			return null;
-		else
-			return loadedEvent.getVisible() == 1 ? (EventBean) beanConverter
-					.convert(loadedEvent, EventBean.class) : null;
+		return loadedEvent == null?
+				null:(EventBean) beanConverter.convert(loadedEvent, EventBean.class);
 	}
 
 }

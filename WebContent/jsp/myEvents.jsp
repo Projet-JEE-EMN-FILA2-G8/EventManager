@@ -46,8 +46,8 @@
 									<tr>
 										<td>${event.nom}</td>
 										<td>${event.adresse}</td>
-										<td>${event.datedeb}</td>
-										<td>${event.datefin}</td>
+										<td>${event.datedebToString}</td>
+										<td>${event.datefinToString}</td>
 										<td>
 											<form action="?action=publish&eventId=${event.id}" method="post">
 												<a href="<c:url value="/Event/${event.id}"/>" class="btn btn-default">Voir</a>

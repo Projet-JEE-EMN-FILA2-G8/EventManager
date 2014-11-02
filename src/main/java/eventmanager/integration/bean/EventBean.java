@@ -1,5 +1,6 @@
 package eventmanager.integration.bean;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -105,6 +106,18 @@ public class EventBean extends AbstractBean {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public String getDatedebToString() {
+		return formatDate(datedeb);
+	}
+	
+	public String getDatefinToString() {
+		return formatDate(datefin);
+	}
+	
+	private String formatDate(Date date) {
+		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(date);
 	}
 
 }

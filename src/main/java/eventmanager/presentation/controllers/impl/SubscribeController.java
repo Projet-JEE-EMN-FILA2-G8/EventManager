@@ -10,6 +10,7 @@ import eventmanager.presentation.controllers.AbstractController;
 import eventmanager.presentation.utils.Authentication;
 import eventmanager.presentation.utils.Constants;
 import eventmanager.presentation.utils.HttpMethod;
+import eventmanager.tools.MailingEngine;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -52,37 +53,26 @@ public class SubscribeController extends AbstractController {
 			if(method==HttpMethod.POST) {
 				
 				String user = request.getParameter("email");
-		        String pwd = request.getParameter("password");
+		        String pwd = request.getParameter("pwd");
 		        
 		        UsersServices uServices = new UsersServicesImpl();
 		        UserBean userBean = new UserBean(user, pwd);
-		        
-		        boolean authenticated = false;
-        		try {
-        			authenticated = uServices.authenticateUser(userBean);
-	        	}catch(Exception ex){ex.printStackTrace();}		
-		        
-		        if(!authenticated){
-		        	
-		        	boolean success=true;
-		        	try {
-		        		success = uServices.createUser(userBean);
-		        	}catch(Exception ex){ex.printStackTrace();}
-		        	
-		        	if(success) {
+		        try {
+			        if(uServices.createUser(userBean)){
 		        		HttpSession session = request.getSession();
 		        		session.setAttribute("user", userBean);
 		        		session.setMaxInactiveInterval(30*60);
+		        		// Envoi du mail de confirmation
+		        		MailingEngine.getInstance().sendUserCreationConfirmation(userBean); 
 		        		showMainPage(response);
 		        		return;
-		        	}
-		        	else 
-		        	{
-		        		message = "<font color=red>Impossible de creer cet utilisateur</font>";
-		        	}
-		            
-		        }else {
-		        	message = "<font color=red>Vous avez déjà un compte !</font>";
+			        } else {
+			        	message = "<font color=red>Vous avez déjà un compte !</font>";
+			        }
+		        } catch (Exception e) {
+		        	// log4j ici
+		        	System.out.println("Impossible de creer l'user");
+		        	message = "<font color=red>Impossible de créer le compte.</font>";
 		        }
 			} 
 			

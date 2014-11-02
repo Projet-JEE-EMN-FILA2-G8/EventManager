@@ -28,8 +28,6 @@ import eventmanager.presentation.utils.HttpMethod;
 @WebServlet("/Login")
 public class LoginController extends AbstractController {
 	private static final long serialVersionUID = 1L;
-	private final String userID = "admin@test.com";
-	private final String password = "password";
        
     /**
      * @see AbstractController#AbstractController()
@@ -61,7 +59,7 @@ public class LoginController extends AbstractController {
 		        UsersServices uServices = new UsersServicesImpl();
 		        UserBean userBean = new UserBean(user, pwd);
 		        
-		        if(userID.equals(user) && password.equals(pwd) || uServices.authenticateUser(userBean)){
+		        if(uServices.authenticateUser(userBean)){
 		            HttpSession session = request.getSession();
 		            session.setAttribute("user", userBean);
 		            session.setMaxInactiveInterval(30*60);

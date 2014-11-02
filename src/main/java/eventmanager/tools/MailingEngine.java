@@ -17,12 +17,9 @@ import eventmanager.integration.bean.UserBean;
 
 public class MailingEngine {
 	private static MailingEngine singleton = new MailingEngine();
-	private Log4JLogger logger;
 
 	// Constructeur privé
-	public MailingEngine() {
-		logger = new Log4JLogger();
-	}
+	private MailingEngine() {}
 	
 	/**
 	 * @return le singleton MailingEngine
@@ -35,8 +32,13 @@ public class MailingEngine {
 	 * Envoi un email contenant le lien de l'evenement pour confirmer sa publication 
 	 * @param event l'evenement à partager
 	 */
-	public void sendPublishingConfirmationMail(String destinataire, EventBean event) {
-	
+	public void sendPublishingConfirmationMail(EventBean event, String url) {
+		String topic = "Confirmation publication d'événement - EventManager FILA2-G8";
+		String content = "Votre événement "+ event.getNom() + " a été publié.\n\n" + 
+				"Vous pouvez le retrouver dans votre espace personnel sur notre site.\n" +
+				"Vous pouvez également inviter des participants en leur transemttant le lien suivant : " + url +
+				"\n\n Cordialement,\n Le groupe 8.";
+		sendEmail(event.getHote().getEmail(), content, topic);
 	}
 	
 	public void sendRegisteringConfirmation() {}
@@ -77,8 +79,6 @@ public class MailingEngine {
 			message.setText(content);
 			 
 			Transport.send(message);
-		} catch (MessagingException e) {
-			logger.error("Failure sending mail to :" + destinataire);
-		}
+		} catch (MessagingException e) {}
 	}
 }

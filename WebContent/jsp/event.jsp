@@ -24,8 +24,8 @@
 			<!-- List group -->
 			<ul class="list-group">
 				<li class="list-group-item"><b>ADRESSE</b><br>${event.adresse}</li>
-				<li class="list-group-item"><b>DEBUT</b><br>${event.datedeb}</li>
-				<li class="list-group-item"><b>FIN</b><br>${event.datefin}</li>
+				<li class="list-group-item"><b>DEBUT</b><br>${event.datedebToString}</li>
+				<li class="list-group-item"><b>FIN</b><br>${event.datefinToString}</li>
 				<li class="list-group-item">
 					<b>LIEN</b><br> 
 					<a href="${eventurl}" id="link${event.id}">${eventurl}</a> <!-- | <button class="btn btn-primary" onclick="copy('link${even.id}');">Copier</button> -->

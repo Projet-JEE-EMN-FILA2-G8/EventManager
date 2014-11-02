@@ -10,23 +10,34 @@
 	<dependencies>
 		
 		<!-- ==================== DEPENDENCIES for "COMPILE" SCOPE ==================== -->
-		
 		<dependency>
 			<groupId>com.efsavage.twitter.bootstrap</groupId>
 			<artifactId>bootstrap-maven</artifactId>
 			<version>2.3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.0.1</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
-			<scope>runtime</scope>
 			<version>1.1.1</version>
+			<scope>runtime</scope>
 		</dependency>
 		
 		<!-- Add the JDBC driver here -->
@@ -83,7 +94,6 @@
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
 			<version>1.4.7</version>
-			<scope>test</scope>
 		</dependency>
 		
 		<!-- ==================== DEPENDENCIES for "TEST" SCOPE ==================== -->

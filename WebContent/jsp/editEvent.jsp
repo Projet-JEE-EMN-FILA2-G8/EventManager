@@ -6,6 +6,24 @@
 <head>
 
 <%@ include file="./fragments/head.jsp"%>
+<link href="<c:url value="/css/bootstrap-datetimepicker.min.css"/>" rel="stylesheet" media="screen">
+<script type="text/javascript" src="<c:url value="/js/bootstrap-datetimepicker.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/locales/bootstrap-datetimepicker.fr.js"/>"></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+	  $('.datetime').datetimepicker({
+		  todayBtn:"true",
+		  format:"dd M. yyyy hh:ii", 
+		  autoclose:"true",
+		  pickerPosition:"bottom-left",
+		  startView:"year",
+		  minView:"hour",
+		  language:"fr"
+	  });
+  });
+</script>
+
 <title>Event</title>
 </head>
 <body>
@@ -46,13 +64,13 @@
 				<div class="form-group">
 					<label for="datedeb" class="col-sm-2 control-label">DEBUT</label>
 					<div class="col-sm-6">
-			      		<input type="date" class="form-control" id="datedeb" name="datedeb" placeholder="Date de début" value="${event.datedeb}">
+			      		<input class="form-control datetime" id="datedeb" name="datedeb" placeholder="Date de début" value="${event.datedebToString}">
 			    	</div>
 				</div>
 				<div class="form-group">
 					<label for="datefin" class="col-sm-2 control-label">FIN</label>
 					<div class="col-sm-6">
-			      		<input type="date" class="form-control" id="datefin" name="datefin" placeholder="Date de fin" value="${event.datefin}">
+			      		<input class="form-control datetime" id="datefin" name="datefin" placeholder="Date de fin" value="${event.datefinToString}">
 			    	</div>
 				</div>
 				<div class="form-group">
