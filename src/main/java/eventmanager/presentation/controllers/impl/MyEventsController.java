@@ -1,8 +1,6 @@
 package eventmanager.presentation.controllers.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -19,6 +17,7 @@ import eventmanager.integration.impl.EventsServicesImpl;
 import eventmanager.presentation.controllers.AbstractController;
 import eventmanager.presentation.utils.Constants;
 import eventmanager.presentation.utils.HttpMethod;
+import eventmanager.tools.MailingEngine;
 
 /**
  * @author Hadrien
@@ -36,7 +35,6 @@ public class MyEventsController extends AbstractController {
      */
     public MyEventsController() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/* (non-Javadoc)
@@ -50,13 +48,23 @@ public class MyEventsController extends AbstractController {
 		if(method==HttpMethod.POST) {
 			
 			String action = request.getParameter(Constants.ACTION);
-			String eventId = request.getParameter("eventid");
+			String eventId = request.getParameter("eventId");
 						
-			if(Constants.ACTION_SHOW.equals(action)) {
+			if(Constants.ACTION_SHOW.equals(action) && eventId != null
+					&& !"".equals(eventId)) {
 				
-				EventBean eventBean = new EventBean();
-				eventBean.setId(Integer.parseInt(eventId));
-				eServices.publishEvent(eventBean);
+				// Récupération de l'évènement
+				EventBean eventBean = eServices.getEventById(Integer.parseInt(eventId));
+				if (eventBean != null && 
+						eServices.publishEvent(eventBean)) {
+					// Envoi du mail de confirmation
+					MailingEngine mailEngine = MailingEngine.getInstance();
+					String url = request.getScheme() + 
+							"://" + request.getServerName() + ":" 
+							+ request.getServerPort() +
+							"/Event/" + eventBean.getId();
+					mailEngine.sendPublishingConfirmationMail(eventBean, url);
+				}
 			}
 		}
 		
@@ -67,26 +75,12 @@ public class MyEventsController extends AbstractController {
 		try {
 			userEvents = eServices.getHostedEvents(user);
 		}catch(Exception e) {
+			// TODO error handling + log4j here
 			e.printStackTrace();
-			userEvents = new ArrayList<EventBean>();
-			
-			EventBean eventBean = new EventBean();
-			eventBean.setId(1);
-			eventBean.setNom("Java Dev Conférence");
-			eventBean.setDescription("Conférence autour de Java 8 et des technologies associées");
-			eventBean.setDatedeb(new Date(2014,10,29,8,15));
-			eventBean.setDatefin(new Date(2014,10,30,20,30));
-			eventBean.setAdresse("Centre des congrès de Nantes - 44000 Nantes");
-			eventBean.setVisible(true);
-			userEvents.add(eventBean);
-			userEvents.add(eventBean);
 		}
 		
-		
 		request.setAttribute("myEvents", userEvents);
-		
 		showMyEventsPage(request, response);
-		
 	}
 	
 	

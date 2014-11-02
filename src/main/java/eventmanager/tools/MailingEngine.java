@@ -10,8 +10,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.logging.impl.Log4JLogger;
-
 import eventmanager.integration.bean.EventBean;
 import eventmanager.integration.bean.UserBean;
 
@@ -36,7 +34,7 @@ public class MailingEngine {
 		String topic = "Confirmation publication d'événement - EventManager FILA2-G8";
 		String content = "Votre événement "+ event.getNom() + " a été publié.\n\n" + 
 				"Vous pouvez le retrouver dans votre espace personnel sur notre site.\n" +
-				"Vous pouvez également inviter des participants en leur transemttant le lien suivant : " + url +
+				"Vous pouvez également inviter des participants en leur transmettant le lien suivant : " + url +
 				"\n\n Cordialement,\n Le groupe 8.";
 		sendEmail(event.getHote().getEmail(), content, topic);
 	}

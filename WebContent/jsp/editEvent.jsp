@@ -14,7 +14,7 @@
   $(document).ready(function() {
 	  $('.datetime').datetimepicker({
 		  todayBtn:"true",
-		  format:"dd M. yyyy hh:ii", 
+		  format:"dd M yyyy hh:ii", 
 		  autoclose:"true",
 		  pickerPosition:"bottom-left",
 		  startView:"year",

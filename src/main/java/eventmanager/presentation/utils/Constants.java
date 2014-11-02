@@ -40,7 +40,7 @@ public class Constants {
 	
 	public static final String ACTION = "action";
 	public static final String ACTION_DELETE = "delete";
-	public static final String ACTION_SHOW = "show";
+	public static final String ACTION_SHOW = "publish";
 	public static final String ACTION_SUSBCRIBE= "show";
 	
 }

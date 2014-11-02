@@ -108,14 +108,24 @@ public class EventBean extends AbstractBean {
 		this.id = id;
 	}
 	
+	/**
+	 * @return Date de début sous forme de chaine au format dd M. yyyy hh:ii
+	 */
 	public String getDatedebToString() {
 		return formatDate(datedeb);
 	}
 	
+	/**
+	 * @return Date de fin sous forme de chaine au format dd M. yyyy hh:ii
+	 */
 	public String getDatefinToString() {
 		return formatDate(datefin);
 	}
 	
+	/**
+	 * @param date la date à formater
+	 * @return une chaine au format dd M. yyyy hh:ii
+	 */
 	private String formatDate(Date date) {
 		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(date);
 	}

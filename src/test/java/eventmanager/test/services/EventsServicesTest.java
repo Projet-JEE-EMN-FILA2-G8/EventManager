@@ -67,6 +67,9 @@ public class EventsServicesTest {
 		assertNotNull(insertedBean);
 		eventsToDelete.add(insertedBean);
 		assertTrue("Hôte enregistré", eventBean.getHote().equals(insertedBean.getHote()));
+		assertEquals("Dates enregistrées", eventBean.getDatedeb(), insertedBean.getDatedeb());
+		assertEquals("Dates enregistrées", eventBean.getDatefin(), insertedBean.getDatefin());
+		assertEquals("Nom enregistré", eventBean.getNom(), insertedBean.getNom());
 		assertNotNull(eventsServices.getHostedEvents(host));
 		
 	}

@@ -1,8 +1,6 @@
 package eventmanager.presentation.controllers.impl;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -44,7 +42,6 @@ public class EventController extends AbstractController {
 	/* (non-Javadoc)
 	 * @see eventmanager.presentation.controllers.AbstractController#process(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, eventmanager.presentation.utils.HttpMethod)
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void process(HttpServletRequest request, HttpServletResponse response, HttpMethod method)	throws ServletException, IOException {
 
@@ -55,17 +52,13 @@ public class EventController extends AbstractController {
 		EventsServices eServices = new EventsServicesImpl();
 		EventBean eventBean = new EventBean();
 		
-		/*try {
-			eventBean = eServices.getEventByUrl(new URL(eventId));
+		try {
+			eventBean = eServices.getEventById(Integer.parseInt(eventId));
 		} catch (Exception e) {
-			e.printStackTrace();*/
-			eventBean.setId(Integer.parseInt(eventId));
-			eventBean.setNom("Java Dev Conférence");
-			eventBean.setDescription("Conférence autour de Java 8 et des technologies associées");
-			eventBean.setDatedeb(new Date(2014,10,29,8,15));
-			eventBean.setDatefin(new Date(2014,10,30,20,30));
-			eventBean.setAdresse("Centre des congrès de Nantes - 44000 Nantes");
-		//}
+			e.printStackTrace();
+			// TODO log4j here - il faut distinguer un plantage couche service d'une erreur
+			// de parsing
+		}
 				
 		request.setAttribute("event", eventBean);
 		request.setAttribute("eventId", Long.parseLong(eventId));
@@ -87,7 +80,7 @@ public class EventController extends AbstractController {
 				participantBean.setEmail(email);
 				participantBean.setSociete(societe);
 				
-				boolean registered = true;//eServices.registerParticipant(eventBean, participantBean);
+				boolean registered = eServices.registerParticipant(eventBean, participantBean);
 				
 				request.setAttribute("registered", registered);
 				

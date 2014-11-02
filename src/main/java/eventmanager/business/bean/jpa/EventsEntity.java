@@ -61,11 +61,11 @@ public class EventsEntity implements Serializable {
     @Column(name="ADRESSE", nullable=false, length=100)
     private String     adresse      ;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="DATEDEB", nullable=false)
     private Date       datedeb      ;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="DATEFIN", nullable=false)
     private Date       datefin      ;
 

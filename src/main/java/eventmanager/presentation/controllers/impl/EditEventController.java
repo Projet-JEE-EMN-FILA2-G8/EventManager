@@ -2,6 +2,7 @@ package eventmanager.presentation.controllers.impl;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -34,7 +35,6 @@ public class EditEventController extends AbstractController {
      */
     public EditEventController() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/* (non-Javadoc)
@@ -49,7 +49,10 @@ public class EditEventController extends AbstractController {
 		String eventId = parameters.length > 1 ? parameters[1] : null;
 		
 		EventsServices eServices = new EventsServicesImpl();
-		EventBean eventBean = new EventBean();
+
+		// Récupération de l'evenement si on est en édition
+		EventBean eventBean = (EventBean) (request.getAttribute("event") != null?
+					request.getAttribute("event"):new EventBean());
 		
 		if(method==HttpMethod.POST) {
 			
@@ -66,13 +69,26 @@ public class EditEventController extends AbstractController {
 				eventBean.setNom(nom);
 				eventBean.setDescription(description);
 				eventBean.setAdresse(adresse);
+				
 				// TODO : Set dates as required
-				eventBean.setDatedeb(datedeb == null || "".equals(datedeb)?
-						new Date():
-						DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).parse(datedeb));
-				eventBean.setDatefin(datefin == null || "".equals(datefin)?
-						new Date():
-						DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).parse(datefin));
+				try {
+					eventBean.setDatedeb(datedeb == null || "".equals(datedeb)?
+							new Date():
+							DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).parse(datedeb));
+				} catch (ParseException e) {
+					// Si le parse ne fonctionne pas, on ne modifie pas la date ?
+					// TODO log4j here
+					eventBean.setDatedeb(new Date());
+				}
+				try {
+					eventBean.setDatefin(datefin == null || "".equals(datefin)?
+							new Date():
+							DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).parse(datefin));
+				} catch (ParseException e) {
+					// TODO log4j here
+					eventBean.setDatefin(new Date());
+				}
+				
 				// Récupération de l'utilisateur créateur de l'evenement
 				eventBean.setHote((UserBean) request.getSession().getAttribute("user"));
 				
@@ -94,14 +110,9 @@ public class EditEventController extends AbstractController {
 					try {
 						eventBean = eServices.getEventById(Integer.parseInt(eventId));
 					} catch (Exception e) {
+						// TODO error handling + log4j here
 						e.printStackTrace();
 						localRedirect(response, Constants.SERVLET_CREATE_EVENT);
-						eventBean.setId(Integer.parseInt(eventId));
-						eventBean.setNom("Java Dev Conférence");
-						eventBean.setDescription("Conférence autour de Java 8 et des technologies associées");
-						eventBean.setDatedeb(new Date(2014,10,29,8,15));
-						eventBean.setDatefin(new Date(2014,10,30,20,30));
-						eventBean.setAdresse("Centre des congrès de Nantes - 44000 Nantes");
 					}
 					request.setAttribute("event", eventBean);
 				}

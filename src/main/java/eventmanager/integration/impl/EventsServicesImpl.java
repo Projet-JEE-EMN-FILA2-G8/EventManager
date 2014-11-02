@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 
 import eventmanager.business.bean.jpa.EventsEntity;
@@ -68,8 +69,8 @@ public class EventsServicesImpl implements EventsServices {
 	@Override
 	public boolean publishEvent(EventBean event) {
 		event.setVisible(true);
-		EventsEntity eventEntity = daoEvents.save((EventsEntity) beanConverter
-				.convert(event, EventsEntity.class));
+		EventsEntity eventEntity = daoEvents.save((EventsEntity) 
+				beanConverter.convert(event, EventsEntity.class));
 
 		return eventEntity.getVisible() == 1;
 	}
