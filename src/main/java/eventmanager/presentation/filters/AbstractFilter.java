@@ -54,10 +54,24 @@ public abstract class AbstractFilter implements Filter {
 		}
 	}
 	
+	/**
+	 * Effectue une redirection par rapport au context path
+	 * @param response
+	 * @param localPath
+	 * @throws IOException
+	 */
 	protected void localRedirect(HttpServletResponse response, String localPath) throws IOException {
 		response.sendRedirect(context.getContextPath() + localPath);
 	}
 	
+	/**
+	 * Traite la requete entrante
+	 * @param request la requête entrante
+	 * @param response la réponse de la servlet
+	 * @param chain
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	public abstract void process(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException;
 	
 	/**

@@ -63,7 +63,7 @@ public class EditEventController extends AbstractController {
 					eventBean = eServices.getEventById(Integer.parseInt(eventId));
 				} catch (Exception e) {
 					// TODO error handling + log4j here
-					e.printStackTrace();
+					this.context.log(e.toString());
 					// L'event n'a pas pu être récupéré, on redirige donc vers la page de création
 					localRedirect(response, Constants.SERVLET_CREATE_EVENT); 
 					return;
@@ -103,6 +103,7 @@ public class EditEventController extends AbstractController {
 				} catch (ParseException e) {
 					// Si le parse ne fonctionne pas, on ne modifie pas la date ?
 					// TODO log4j here
+					this.context.log(e.toString());
 					eventBean.setDatedeb(new Date());
 				}
 				try {
@@ -111,6 +112,7 @@ public class EditEventController extends AbstractController {
 							DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).parse(datefin));
 				} catch (ParseException e) {
 					// TODO log4j here
+					this.context.log(e.toString());
 					eventBean.setDatefin(new Date());
 				}
 				
@@ -127,6 +129,7 @@ public class EditEventController extends AbstractController {
 			catch(Exception e) {
 				e.printStackTrace();
 				// TODO log4j needed here
+				this.context.log(e.toString());
 				request.setAttribute("error", isEditEventServlet ? "modification" : "création");
 			}
 		}

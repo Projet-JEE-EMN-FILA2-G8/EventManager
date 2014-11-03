@@ -34,7 +34,6 @@ public class SubscribeController extends AbstractController {
      */
     public SubscribeController() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/* (non-Javadoc)

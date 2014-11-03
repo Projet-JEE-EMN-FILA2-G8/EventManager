@@ -27,7 +27,6 @@ public class PathFilter extends AbstractFilter implements Filter {
      */
     public PathFilter() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 
@@ -39,15 +38,11 @@ public class PathFilter extends AbstractFilter implements Filter {
 			
 		String servletPath = request.getServletPath();
 		
-		if(servletPath==null || servletPath.replace("/", "").equals("")) {
+		if(servletPath==null || servletPath.replace("/", "").isEmpty()) {
 			localRedirect(response, Constants.SERVLET_MAIN);
 		}
 		else
-		{
-			//ServletContext context = getServletContext();
-			//rd = context.getRequestDispatcher("/page.html");
-			//rd = context.getNamedDispatcher("name");
-			
+		{			
 			chain.doFilter(request, response);
 		}
 	
