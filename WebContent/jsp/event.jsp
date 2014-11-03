@@ -120,6 +120,45 @@
 				</c:choose>
 			</div>	
 			<!-- /Panel -->
+			<c:if test="${not empty requestScope.participants}">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Liste des participants</h3>
+					</div>
+			
+					<div class="panel-body">
+						<h4>${fn:length(requestScope.participants)} participant(s).</h4>
+					</div>
+			
+					<c:if test="${fn:length(requestScope.participants) > 0}">
+						<!-- List group -->				
+						<ul class="list-group">
+							<li class="list-group-item">
+								<table class="table">
+									<thead>
+								        <tr>
+								        	<th>Nom</th>
+									    	<th>Prénom</th>
+									        <th>Société</th>
+									        <th>Email</th>
+							     	 </thead>
+									<tbody>
+										<c:forEach var="participant" items="${requestScope.participants}">
+											<tr>
+												<td>${participant.nom}</td>
+												<td>${participant.prenom}</td>
+												<td>${participant.societe}</td>
+												<td>${participant.email}</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</li>
+						</ul>
+					</c:if>
+				</div>
+				<!-- /Panel -->
+			</c:if>
 		</c:otherwise>
 		</c:choose>
 	</div>

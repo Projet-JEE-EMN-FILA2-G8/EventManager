@@ -67,6 +67,7 @@ public class LoginController extends AbstractController {
 			        	request.setAttribute("badLoginOrPassword", true);
 			        }
 		        }catch(Exception e) {
+		        	this.context.log(e.toString());
 		        	request.setAttribute("errorOccured", true);
 		        }
 			} 

@@ -47,11 +47,16 @@ public final class AuthFilter extends AbstractFilter implements Filter {
 		if (isAuthenticated || isResource || (! needAuthentication)) {
 			chain.doFilter(request, response);
 		} else {
-			this.context.log("Unauthorized access request: " + request.getRequestURI());
+			this.context.log("Accès non autorisé pour la requête : " + request.getRequestURI());
 			localRedirect(response, Constants.SERVLET_LOGIN);
 		}
 	}
 
+	/**
+	 *  Méthode indiquant si la requête entrante designe une ressource pour laquelle il n'est pas nécessaire d'être authentifié
+	 * @param request la requête entrante
+	 * @return True si la requête designe une ressource pour laquelle il n'est pas nécessaire d'être authentifié
+	 */
 	private boolean isAuthorizedResource(HttpServletRequest request) {
 		String requestedPath = request.getRequestURI();
 		
@@ -72,6 +77,11 @@ public final class AuthFilter extends AbstractFilter implements Filter {
 		return authorizedTarget;
 	}
 	
+	/**
+	 *  Méthode indiquant si la requête entrante designe une servlet pour laquelle il faut être authentifié
+	 * @param request la requête entrante
+	 * @return True si la requête designe une servlet pour laquelle il faut être authentifié
+	 */
 	private boolean targetNeedAuthentication(HttpServletRequest request) {
 		
 		String servlet = request.getServletPath();

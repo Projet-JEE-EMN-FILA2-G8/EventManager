@@ -45,6 +45,8 @@ public class MyEventsController extends AbstractController {
 
 		EventsServices eServices = new EventsServicesImpl();
 		
+		//Si la methode POST est utilisee alors il doit s'agir de la publication d'un evenement
+		
 		if(method==HttpMethod.POST) {
 			
 			String action = request.getParameter(Constants.ACTION);
@@ -77,7 +79,7 @@ public class MyEventsController extends AbstractController {
 			userEvents = eServices.getHostedEvents(user);
 		}catch(Exception e) {
 			// TODO error handling + log4j here
-			e.printStackTrace();
+			this.context.log(e.toString());
 		}
 		
 		request.setAttribute("myEvents", userEvents);

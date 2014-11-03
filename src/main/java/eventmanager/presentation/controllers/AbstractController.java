@@ -44,9 +44,14 @@ public abstract class AbstractController extends HttpServlet {
 	 */
 	public AbstractController() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Effectue une redirection par rapport au context path
+	 * @param response
+	 * @param localPath
+	 * @throws IOException
+	 */
 	protected void localRedirect(HttpServletResponse response, String localPath) throws IOException {
 		response.sendRedirect(context.getContextPath() + localPath);
 	}
@@ -86,6 +91,15 @@ public abstract class AbstractController extends HttpServlet {
 		process(request, response, HttpMethod.TRACE);
 	}
 
+
+	/**
+	 * Traite la requete entrante
+	 * @param request la requête entrante
+	 * @param response la réponse de la servlet
+	 * @param method La methode utilisée (GET, POST, PUT, ...)
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected abstract void process(HttpServletRequest request,
 			HttpServletResponse response, HttpMethod method)
 			throws ServletException, IOException;

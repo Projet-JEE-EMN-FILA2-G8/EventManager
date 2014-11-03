@@ -7,7 +7,6 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +27,6 @@ public class RequestLoggingFilter extends AbstractFilter implements Filter {
      */
     public RequestLoggingFilter() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/* (non-Javadoc)
@@ -41,17 +39,14 @@ public class RequestLoggingFilter extends AbstractFilter implements Filter {
         while(params.hasMoreElements()){
             String name = params.nextElement();
             String value = request.getParameter(name);
-            this.context.log(request.getRemoteAddr() + "::Request Params::{"+name+"="+value+"}");
+            this.context.log(request.getRemoteAddr() + " : param {"+name+"="+value+"}");
+        }       
+        
+        try {        	
+        	chain.doFilter(request, response);
+        } catch (Exception e) {
+        	this.context.log(e.toString());
         }
-	         
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                this.context.log(request.getRemoteAddr() + "::Cookie::{"+cookie.getName()+","+cookie.getValue()+"}");
-            }
-        }
-        // pass the request along the filter chain
-        chain.doFilter(request, response);
 	}
 
 }
