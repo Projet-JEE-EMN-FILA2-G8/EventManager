@@ -40,7 +40,8 @@ public class ParticipantsEntityMock {
 		entity.setEmail( mockValues.nextString(30) ) ; // java.lang.String 
 		entity.setSociete( mockValues.nextString(24) ) ; // java.lang.String 
 		// Init Link fields (if any)
-		// setListOfEvents( TODO ) ; // List<Events> 
+		EventsEntityMock eventMock = new EventsEntityMock();
+		entity.setListOfEvents(eventMock.createList(1));
 		return entity ;
 	}
 	

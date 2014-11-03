@@ -18,6 +18,10 @@ import eventmanager.integration.bean.UserBean;
 
 public class BeanConverter implements Converter {
 
+	/* (non-Javadoc)
+	 * Surchage de la méthode Convert pour convertir les différents beans de l'application
+	 * @see org.apache.commons.beanutils.Converter#convert(java.lang.Class, java.lang.Object)
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object convert(Class clazz, Object value) {
@@ -55,31 +59,12 @@ public class BeanConverter implements Converter {
 			valToReturn = new RegistrationEntity();
 		} else if (clazz == ParticipantsEntity.class && value instanceof ParticipantBean) {
 			valToReturn = new ParticipantsEntity();
-//			List<EventBean> listToConvert = ((ParticipantBean) value).getListEvents();
-//			
-//			if (listToConvert != null) {
-//				List<EventsEntity> convertedList = new ArrayList<EventsEntity>();
-//				for (EventBean elem : listToConvert) {
-//					convertedList.add((EventsEntity) convert(EventsEntity.class, elem));
-//				}
-//				((ParticipantsEntity) valToReturn).setListOfEvents(convertedList);
-//			}
 		} else if (clazz == ParticipantBean.class && value instanceof ParticipantsEntity) {
 			valToReturn = new ParticipantBean();
-//			List<EventsEntity> listToConvert = ((ParticipantsEntity) value).getListOfEvents();
-//			
-//			if (listToConvert != null) {
-//				List<EventBean> convertedList = new ArrayList<EventBean>();
-//				for (EventsEntity elem : listToConvert) {
-//					convertedList.add((EventBean) convert(EventBean.class, elem));
-//				}
-//				((ParticipantBean) valToReturn).setListEvents(convertedList);
-//			}
 		}
 		try {
 			BeanUtils.copyProperties(valToReturn, value);
 		} catch (IllegalAccessException | InvocationTargetException e) {
-			// TODO Gestion des exceptions lors de la conversion des types
 			e.printStackTrace();
 		}
 		return valToReturn;

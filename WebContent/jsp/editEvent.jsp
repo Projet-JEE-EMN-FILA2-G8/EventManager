@@ -12,6 +12,7 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+	  // Ajout module calendrier pour la séléction des dates
 	  $('.datetime').datetimepicker({
 		  todayBtn:"true",
 		  format:"dd M yyyy hh:ii", 
@@ -26,19 +27,24 @@
 	  if ($('#datefin').val() == null || $('#datefin').val() == "") {
 		  $('#blockDateFin').hide();
 	  }
+	  // block erreur
 	  $('#datesError').hide();
 	  
+	  // Lorsque la datedebut est saisie
 	  $('#datedeb').change(function() {
 		 $('#datesError').slideUp();
 		 
 		 // Report de la date saisie dans la date de fin
 		 var dateDebut = $('#datedeb').datetimepicker('getDate');
+		 // L'utilisateur ne pourra pas saisir une date inférieure via le calendrier
 		 $('#datefin').datetimepicker('setStartDate', dateDebut);
+		 // Affichage du block
 		 $('#blockDateFin').slideDown();
 		 
 		 // Gestion saisie
 		 $('#submitButton').prop('disabled', false);
 		 if ($('#datedeb').datetimepicker('getDate') > $('#datefin').datetimepicker('getDate')) {
+			 // Si les dates sont incorrectes, on désactive le bouton submit et on affiche le block erreur
 			 $('#datesError').slideDown();
 			 $('#submitButton').prop('disabled', true);
 		 }
@@ -48,6 +54,7 @@
 		  $('#datesError').slideUp();
 		  $('#submitButton').prop('disabled', false);
 		  if ($('#datedeb').datetimepicker('getDate') > $('#datefin').datetimepicker('getDate')) {
+			// Si les dates sont incorrectes, on désactive le bouton submit et on affiche le block erreur
 			 $('#datesError').slideDown();
 			 $('#submitButton').prop('disabled', true);
 		  }

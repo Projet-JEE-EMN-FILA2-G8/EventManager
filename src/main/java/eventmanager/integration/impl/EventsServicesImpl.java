@@ -37,6 +37,7 @@ public class EventsServicesImpl implements EventsServices {
 		daoRegistration = PersistenceServiceProvider.getService(
 				RegistrationPersistence.class, PersistenceConfig.JPA);
 		beanConverter = new ConvertUtilsBean();
+		// Déclaration des convertisseurs de beans utiles à la classe
 		beanConverter.register(new BeanConverter(), EventsEntity.class);
 		beanConverter.register(new BeanConverter(), ParticipantsEntity.class);
 		beanConverter.register(new BeanConverter(), UsersEntity.class);
@@ -59,12 +60,6 @@ public class EventsServicesImpl implements EventsServices {
 		return null;
 	}
 
-	/**
-	 * @param event
-	 *            l'evenement à publier
-	 * @return l'URL de l'évenement
-	 * @see eventmanager.integration.EventsServices#publishEvent(eventmanager.integration.bean.EventBean)
-	 */
 	@Override
 	public boolean publishEvent(EventBean event) {
 		event.setVisible(true);

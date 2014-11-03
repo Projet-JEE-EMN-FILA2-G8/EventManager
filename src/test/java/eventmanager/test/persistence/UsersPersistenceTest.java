@@ -39,7 +39,6 @@ public class UsersPersistenceTest
 		
 		UsersEntityMock mock = new UsersEntityMock();
 		
-		// TODO : set primary key values here 
 		process( service, mock, "A"  );
 		// process( service, mock, ... );
 	}

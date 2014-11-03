@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import eventmanager.business.bean.jpa.ParticipantsEntity;
 import eventmanager.business.mock.ParticipantsEntityMock;
+import eventmanager.business.persistence.PersistenceConfig;
 import eventmanager.business.persistence.PersistenceServiceProvider;
 import eventmanager.business.persistence.services.ParticipantsPersistence;
 
@@ -26,7 +27,7 @@ public class ParticipantsPersistenceTest
 		
 		System.out.println("Test count ..." );
 		
-		ParticipantsPersistence service = PersistenceServiceProvider.getService(ParticipantsPersistence.class);
+		ParticipantsPersistence service = PersistenceServiceProvider.getService(ParticipantsPersistence.class, PersistenceConfig.JPA);
 		System.out.println("CountAll = " + service.countAll() );
 	}
 	
@@ -35,13 +36,11 @@ public class ParticipantsPersistenceTest
 		
 		System.out.println("Test Participants persistence : delete + load ..." );
 		
-		ParticipantsPersistence service = PersistenceServiceProvider.getService(ParticipantsPersistence.class);
+		ParticipantsPersistence service = PersistenceServiceProvider.getService(ParticipantsPersistence.class, PersistenceConfig.FAKE);
 		
 		ParticipantsEntityMock mock = new ParticipantsEntityMock();
 		
-		// TODO : set primary key values here 
-		process( service, mock, 0  );
-		// process( service, mock, ... );
+		process( service, mock, 1  );
 	}
 
 	private void process(ParticipantsPersistence service, ParticipantsEntityMock mock, Integer id ) {

@@ -61,9 +61,9 @@ public class MyEventsController extends AbstractController {
 					MailingEngine mailEngine = MailingEngine.getInstance();
 					String url = request.getScheme() + 
 							"://" + request.getServerName() + ":" 
-							+ request.getServerPort() + ":" 
-							+ request.getContextPath() +
-							"/Event/" + eventBean.getId();
+							+ request.getServerPort()
+							+ request.getContextPath()
+							+ "/Event/" + eventBean.getId();
 					mailEngine.sendPublishingConfirmationMail(eventBean, url);
 				}
 			}
