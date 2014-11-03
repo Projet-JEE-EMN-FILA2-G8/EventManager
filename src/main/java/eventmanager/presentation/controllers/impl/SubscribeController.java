@@ -91,6 +91,8 @@ public class SubscribeController extends AbstractController {
 	}
 	
 	private void showSubscribePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Permet d'indiquer au "Header" que l'on est bien sur la page de creation d'un compte
+		request.setAttribute("isSubscribePage", true);
 		RequestDispatcher rd = this.context.getRequestDispatcher(Constants.JSP_SUBSCRIBE);	
 		rd.include(request, response);
 	}

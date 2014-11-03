@@ -76,6 +76,8 @@ public class LoginController extends AbstractController {
 	}
 	
 	private void showLoginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Permet d'indiquer au "Header" que l'on est bien sur la page de login
+		request.setAttribute("isLoginPage", true);
 		RequestDispatcher rd = this.context.getRequestDispatcher(Constants.JSP_LOGIN);	
 		rd.include(request, response);
 	}
