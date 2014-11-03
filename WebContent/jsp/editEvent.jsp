@@ -33,7 +33,6 @@
 		 
 		 // Report de la date saisie dans la date de fin
 		 var dateDebut = $('#datedeb').datetimepicker('getDate');
-		 $('#datefin').datetimepicker('update', dateDebut);
 		 $('#datefin').datetimepicker('setStartDate', dateDebut);
 		 $('#blockDateFin').slideDown();
 		 
