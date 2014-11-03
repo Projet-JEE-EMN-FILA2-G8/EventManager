@@ -26,7 +26,7 @@ public class Constants {
 	public static String FOLDER_JS = "/js/";
 	public static String FOLDER_CSS = "/css/";
 	public static String FOLDER_FONTS = "/fonts/";
-	public static String FOLDER_JSP = "/jsp/";
+	public static String FOLDER_JSP = "/WEB-INF/jsp/";
 	
 	public static final String JSP_HEAD = FOLDER_JSP + "head.jsp";
 	public static final String JSP_NAV = FOLDER_JSP + "nav.jsp";
