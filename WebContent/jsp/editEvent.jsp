@@ -21,6 +21,38 @@
 		  minView:"hour",
 		  language:"fr"
 	  });
+	  
+	  // Si on est en edition on ne masque pas le block date fin
+	  if ($('#datefin').val() == null || $('#datefin').val() == "") {
+		  $('#blockDateFin').hide();
+	  }
+	  $('#datesError').hide();
+	  
+	  $('#datedeb').change(function() {
+		 $('#datesError').slideUp();
+		 
+		 // Report de la date saisie dans la date de fin
+		 var dateDebut = $('#datedeb').datetimepicker('getDate');
+		 $('#datefin').datetimepicker('update', dateDebut);
+		 $('#datefin').datetimepicker('setStartDate', dateDebut);
+		 $('#blockDateFin').slideDown();
+		 
+		 // Gestion saisie
+		 $('#submitButton').prop('disabled', false);
+		 if ($('#datedeb').datetimepicker('getDate') > $('#datefin').datetimepicker('getDate')) {
+			 $('#datesError').slideDown();
+			 $('#submitButton').prop('disabled', true);
+		 }
+	  });
+	  
+	  $('#datefin').change(function() {
+		  $('#datesError').slideUp();
+		  $('#submitButton').prop('disabled', false);
+		  if ($('#datedeb').datetimepicker('getDate') > $('#datefin').datetimepicker('getDate')) {
+			 $('#datesError').slideDown();
+			 $('#submitButton').prop('disabled', true);
+		  }
+	  });
   });
 </script>
 
@@ -49,7 +81,7 @@
 						<div class="col-sm-offset-2 col-sm-10">
 	      					<font color=red>
 								Une erreur est survenue lors de la ${requestScope.error} de l'évènement.<br>
-								<i>Vous-pouvez essayer de recommencer en entrant des paramètres valides.</i>
+								<i>Vous pouvez essayer de recommencer en entrant des paramètres valides.</i>
 							</font>
 	    				</div>
     				</div>
@@ -79,16 +111,24 @@
 			      		<input class="form-control datetime" id="datedeb" name="datedeb" placeholder="Date de début" required="required" value="${event.datedebToString}">
 			    	</div>
 				</div>
-				<div class="form-group">
+				<div id="blockDateFin" class="form-group">
 					<label for="datefin" class="col-sm-2 control-label">FIN</label>
 					<div class="col-sm-6">
 			      		<input class="form-control datetime" id="datefin" name="datefin" placeholder="Date de fin" required="required" value="${event.datefinToString}">
 			    	</div>
 				</div>
 				<div class="form-group">
+					<div id="datesError" class="col-sm-offset-2 col-sm-10">
+      					<font color=red>
+							Les dates saisies sont invalides.<br>
+							<i>La date de fin de l'évènement doit être supérieure à la date de début.</i>
+						</font>
+    				</div>
+   				</div>
+				<div class="form-group">
 			    	<div class="col-sm-offset-2 col-sm-6">
 			    		<a class="btn btn-default" href="<c:url value="/MyEvents"/>">Retour</a>
-				     	<button type="submit" class="btn btn-primary">
+				     	<button id="submitButton" type="submit" class="btn btn-primary">
 				     		<c:if test="${not empty event.id}">Enregistrer</c:if>
 				     		<c:if test="${empty event.id}">Créer</c:if>
 				     	</button>

@@ -39,7 +39,7 @@
 					<div class="col-sm-offset-2 col-sm-10">
       					<font color=red>
 							Une erreur est survenue.<br>
-							<i>Vous-pouvez recommencer en entrant des paramètres valides.</i>
+							<i>Vous pouvez recommencer en entrant des paramètres valides.</i>
 						</font>
     				</div>
 				</c:if>

@@ -77,7 +77,7 @@
 					<c:if test="${errorOccured}">
 						<font color=red>
 							Une erreur est survenue lors de l'inscription.<br>
-							<i>Vous-pouvez recommencer en entrant des paramètres valides.</i>
+							<i>Vous pouvez recommencer en entrant des paramètres valides.</i>
 						</font>
 					</c:if>
 			

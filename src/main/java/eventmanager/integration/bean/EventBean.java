@@ -127,6 +127,7 @@ public class EventBean extends AbstractBean {
 	 * @return une chaine au format dd M. yyyy hh:ii
 	 */
 	private String formatDate(Date date) {
+		if (date == null) return null;
 		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(date);
 	}
 
